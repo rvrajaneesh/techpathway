@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>softwareOneStop — Your Full-Stack Java Trail</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f2ede0;
+    --card:#fbf9f2;
+    --card-alt:#ffffff;
+    --ink:#20190f;
+    --ink-soft:#6f6656;
+    --ink-faint:#a89f8c;
+    --line:#e4dcc4;
+    --dark:#19140d;
+    --dark-soft:#2a2317;
+    --gold:#c99a3c;
+    --gold-deep:#a97b23;
+    --green:#3f6b4f;
+    --green-soft:#e6efe7;
+    --era-core:#c99a3c;
+    --era-oop:#6a5a97;
+    --era-spring:#4f7942;
+    --era-data:#3a6187;
+    --era-advanced:#a15c3e;
+    --era-web:#c1477a;
+    --era-angular:#dd2b3e;
+    --era-react:#2a93c4;
+    --radius:16px;
+    --radius-sm:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{ font-family:'Fraunces',serif; }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+
+  /* ---------- Navbar ---------- */
+  header.navbar{
+    background:linear-gradient(120deg,#1c2b3a,#213a4d 55%,#1c2b3a);
+    color:#f2ede0;
+    padding:16px 32px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{
+    width:30px;height:30px;border-radius:8px;
+    background:linear-gradient(145deg,#4fb0c9,#2a7f99);
+    display:flex;align-items:center;justify-content:center;
+    font-size:15px;
+  }
+  .brand-name{ font-family:'Fraunces',serif; font-weight:600; font-size:20px; letter-spacing:.2px; }
+  .brand-name .bn-soft{ font-weight:500; color:#eef6f8; }
+  .brand-name .bn-one{ font-style:italic; font-weight:600; color:#5fc9e0; margin:0 1px; }
+  .brand-name .bn-stop{ font-weight:700; color:#f2ede0; }
+  .nav-link{ color:#cfc6b2; font-size:14px; text-decoration:none; }
+  .nav-link:hover{ color:#fff; }
+
+  /* ---------- Page shell ---------- */
+  .shell{ max-width:1360px; margin:0 auto; padding:28px 32px 60px; }
+
+  .eyebrow{
+    text-transform:uppercase; letter-spacing:1.2px; font-size:11.5px;
+    color:var(--ink-faint); font-weight:600; margin:0 0 10px;
+  }
+  .track-tabs{ display:flex; gap:26px; border-bottom:1px solid var(--line); margin-bottom:26px; }
+  .track-tab{
+    background:none;border:none;cursor:pointer;
+    font-family:'Inter',sans-serif; font-size:15px; font-weight:600;
+    color:var(--ink-faint); padding:0 0 12px; position:relative;
+  }
+  .track-tab.active{ color:var(--ink); }
+  .track-tab.active::after{
+    content:""; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--gold);
+  }
+  .track-tab .soon{ font-size:10px; font-weight:600; color:var(--ink-faint); margin-left:6px; }
+
+  .hero-row{ display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:26px; flex-wrap:wrap; }
+  .hero-row h1{ font-size:44px; font-weight:600; margin:0 0 8px; line-height:1.08; }
+  .hero-row h1 em{ font-style:italic; font-weight:500; color:var(--gold-deep); }
+  .hero-sub{ color:var(--ink-soft); font-size:15px; margin:0; max-width:520px; }
+  .hero-actions{ display:flex; gap:10px; }
+  .pill-btn{
+    background:rgba(255,255,255,.5); border:1px solid rgba(255,255,255,.65); border-radius:999px;
+    padding:9px 16px; font-size:13.5px; font-weight:600; color:var(--ink);
+    cursor:pointer; display:flex; align-items:center; gap:6px;
+    backdrop-filter:blur(10px) saturate(160%); -webkit-backdrop-filter:blur(10px) saturate(160%);
+    box-shadow:0 4px 14px rgba(120,100,60,.12), inset 0 1px 0 rgba(255,255,255,.6);
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .pill-btn:hover{ border-color:var(--gold); transform:translateY(-1px); box-shadow:0 8px 22px rgba(120,100,60,.18), inset 0 1px 0 rgba(255,255,255,.7); }
+  .pill-btn:active{ transform:translateY(0); }
+
+  /* legend popover */
+  .legend-wrap{ position:relative; }
+  .legend-pop{
+    display:none; position:absolute; right:0; top:calc(100% + 8px);
+    background:rgba(255,255,255,.72); border:1px solid rgba(255,255,255,.7); border-radius:var(--radius-sm);
+    backdrop-filter:blur(14px) saturate(160%); -webkit-backdrop-filter:blur(14px) saturate(160%);
+    padding:14px 16px; box-shadow:0 12px 30px rgba(20,16,8,.16); z-index:30; width:200px;
+  }
+  .legend-pop.show{ display:block; }
+  .legend-item{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-soft); padding:4px 0; }
+  .legend-dot{ width:9px;height:9px;border-radius:50%; flex:none; }
+
+  /* ---------- Main grid ---------- */
+  .grid{ display:grid; grid-template-columns: 330px 350px 1fr; gap:20px; align-items:start; }
+  @media (max-width: 1080px){ .grid{ grid-template-columns:1fr; } }
+
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px;
+    animation: cardIn .35s cubic-bezier(.16,1,.3,1);
+  }
+  .card-alt{ background:var(--card-alt); transition:margin-top .25s ease; }
+  @keyframes cardIn{
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes rowIn{
+    from{ opacity:0; transform:translateX(-6px); }
+    to{ opacity:1; transform:translateX(0); }
+  }
+  .reanim{ animation: cardIn .35s cubic-bezier(.16,1,.3,1); }
+
+  /* ---- trail list column ---- */
+  .trail-head{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
+  .trail-icon{
+    width:38px;height:38px;border-radius:10px; background:var(--dark); color:#f2ede0;
+    display:flex;align-items:center;justify-content:center; font-size:17px;
+  }
+  .trail-title{ font-weight:600; font-size:15.5px; line-height:1.2; }
+  .trail-meta{ font-size:11.5px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.5px; margin-top:2px; }
+
+  .search-input{
+    width:100%; padding:10px 12px; border:1px solid rgba(255,255,255,.7); border-radius:10px;
+    font-family:'Inter',sans-serif; font-size:13.5px; margin-bottom:14px;
+    background:rgba(255,255,255,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  }
+  .search-input:focus{ outline:none; border-color:var(--gold); background:rgba(255,255,255,.85); }
+
+  .chip-row{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px; }
+  .chip{
+    border:1px solid rgba(255,255,255,.6); background:rgba(255,255,255,.4); border-radius:999px; padding:6px 12px;
+    font-size:11.5px; font-weight:700; letter-spacing:.3px; text-transform:uppercase;
+    cursor:pointer; color:var(--ink-soft);
+    backdrop-filter:blur(8px) saturate(150%); -webkit-backdrop-filter:blur(8px) saturate(150%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.5);
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .chip:hover{ transform:translateY(-1px); }
+  .chip.active{ color:var(--ink); font-weight:800; box-shadow:inset 0 1px 0 rgba(255,255,255,.6), 0 6px 16px rgba(0,0,0,.1); }
+
+  .group-block{
+    margin-bottom:16px; padding:14px 12px 12px; border-radius:16px;
+    background:var(--group-bg); border:1px solid var(--group-border);
+    animation: cardIn .3s ease backwards;
+  }
+  .group-block:nth-of-type(2){ animation-delay:.05s; }
+  .group-block:nth-of-type(3){ animation-delay:.1s; }
+  .group-block:nth-of-type(4){ animation-delay:.15s; }
+  .group-block:nth-of-type(5){ animation-delay:.2s; }
+  .topic-row:nth-of-type(2){ animation-delay:.03s; }
+  .topic-row:nth-of-type(3){ animation-delay:.06s; }
+  .topic-row:nth-of-type(4){ animation-delay:.09s; }
+  .topic-row:nth-of-type(5){ animation-delay:.12s; }
+  .sub-row:nth-of-type(2){ animation-delay:.03s; }
+  .sub-row:nth-of-type(3){ animation-delay:.06s; }
+  .sub-row:nth-of-type(4){ animation-delay:.09s; }
+  .sub-row:nth-of-type(5){ animation-delay:.12s; }
+  .sub-row:nth-of-type(6){ animation-delay:.15s; }
+  .group-eyebrow{ font-size:10.5px; font-weight:700; letter-spacing:1px; color:var(--group-text-soft, var(--ink-faint)); text-transform:uppercase; margin:0 0 2px; }
+  .group-eyebrow span.num{ color:var(--group-accent, var(--gold-deep)); margin-right:6px; }
+  .group-name{ font-family:'Fraunces',serif; font-size:15.5px; font-weight:600; margin:0 0 10px; display:flex; align-items:center; color:var(--ink); }
+  .group-dot{ width:8px; height:8px; border-radius:50%; margin-right:9px; flex:none; box-shadow:0 0 0 3px rgba(0,0,0,.04); }
+
+  .topic-row{
+    display:flex; align-items:center; gap:11px; padding:10px 10px; border-radius:12px;
+    cursor:pointer; border:1.5px solid transparent; margin-bottom:5px;
+    transition:background .15s ease, border-color .15s ease;
+    animation: rowIn .3s ease backwards;
+  }
+  .topic-row:hover{ background:rgba(255,255,255,.55); }
+  .topic-row.selected{
+    border-color: var(--accent-line, var(--green));
+    background: var(--accent-soft, var(--green-soft));
+    backdrop-filter:blur(6px);
+  }
+  .topic-icon-sm{
+    width:32px;height:32px;border-radius:8px; background:var(--icon-tint,#efe8d4); display:flex;align-items:center;justify-content:center;
+    font-size:14.5px; flex:none;
+  }
+  .topic-row.selected .topic-icon-sm{ background:rgba(255,255,255,.75); backdrop-filter:blur(6px); }
+  .topic-row-text{ flex:1; min-width:0; }
+  .topic-row-title{ font-size:13.5px; font-weight:600; line-height:1.25; }
+  .topic-row-sub{ font-size:11px; color:var(--ink-faint); margin-top:1px; }
+  .topic-row-chev{ color:var(--ink-faint); font-size:13px; }
+
+  /* ---- subtopics column ---- */
+  .sub-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; padding-bottom:12px; border-bottom:2px solid var(--accent-line, var(--line)); }
+  .sub-head-title{ font-size:11.5px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--ink-faint); }
+  .sub-progress{ font-size:11px; color:var(--ink-faint); }
+  .sub-row{
+    display:flex; align-items:flex-start; gap:10px; padding:9px 8px; border-radius:9px; cursor:pointer;
+    transition:background .15s ease;
+    animation: rowIn .3s ease backwards;
+  }
+  .sub-row:hover{ background:#f4efdf; }
+  .sub-row.active{ background:var(--accent-soft, var(--green-soft)); }
+  .sub-check{
+    width:17px;height:17px; border-radius:5px; border:1.5px solid var(--line); flex:none; margin-top:1px;
+    display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.7);
+    backdrop-filter:blur(4px); transition:background .15s ease, border-color .15s ease, transform .15s ease;
+  }
+  .sub-check:hover{ transform:scale(1.08); }
+  .sub-check.done{ background:var(--accent, var(--green)); border-color:var(--accent, var(--green)); color:#fff; font-size:11px; box-shadow:0 3px 10px var(--accent-shadow, rgba(63,107,79,.35)); }
+  .sub-label{ font-size:13px; line-height:1.35; color:var(--ink); }
+  .sub-label.done{ color:var(--ink-faint); text-decoration:line-through; }
+  .empty-note{ font-size:12.5px; color:var(--ink-faint); padding:6px 4px; }
+
+  /* ---- right detail panel ---- */
+  .detail{
+    background:var(--panel-bg, var(--dark)); color:#efe8d6; border-radius:var(--radius);
+    padding:30px 30px 26px; min-height:520px;
+    transition:background .3s ease, margin-top .25s ease; overflow:hidden; position:relative;
+    animation: cardIn .4s cubic-bezier(.16,1,.3,1);
+  }
+  .badge-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; }
+  .badge{
+    display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.8px; text-transform:uppercase;
+    padding:5px 11px; border-radius:999px; color:#20190f;
+    box-shadow:0 3px 10px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.35);
+  }
+  .badge-count{ font-size:12px; color:#b8ae97; }
+  .detail-eyebrow{ font-size:11.5px; letter-spacing:1px; text-transform:uppercase; color:#a89b78; margin-bottom:8px; }
+  .detail-title{ font-family:'Fraunces',serif; font-weight:600; font-size:29px; line-height:1.15; margin:0 0 16px; color:#fbf6ea; }
+  .detail-blurb{ font-size:14.5px; line-height:1.6; color:#cfc6ae; margin-bottom:26px; }
+  .detail-crumb{ font-size:12.5px; color:#a89b78; margin-bottom:6px; }
+
+  .detail-btn{
+    width:100%; text-align:center; padding:13px; border-radius:12px; font-weight:700; font-size:13.5px;
+    cursor:pointer; margin-bottom:10px; letter-spacing:.2px; position:relative; z-index:1;
+    backdrop-filter:blur(16px) saturate(180%); -webkit-backdrop-filter:blur(16px) saturate(180%);
+    transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+  }
+  .detail-btn:hover{ transform:translateY(-1.5px); filter:brightness(1.08); }
+  .detail-btn:active{ transform:translateY(0); }
+  .detail-btn.gold{
+    background:linear-gradient(135deg, var(--accent-a, rgba(201,154,60,.55)), var(--accent-b, rgba(201,154,60,.2)));
+    border:1px solid var(--accent-border, rgba(255,255,255,.35));
+    color:#fff8ea; box-shadow:0 10px 26px var(--accent-shadow, rgba(0,0,0,.3)), inset 0 1px 0 rgba(255,255,255,.3);
+  }
+  .detail-btn.dark{
+    background:rgba(255,255,255,.07); border:1px solid var(--accent-border-soft, rgba(255,255,255,.14));
+    color:#f2ede0; display:flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08), 0 6px 16px rgba(0,0,0,.2);
+  }
+  .detail-btn.dark:hover{ background:rgba(255,255,255,.12); }
+  .detail-btn.ghost{
+    background:rgba(255,255,255,.03); border:1px dashed var(--accent-border-soft, rgba(255,255,255,.28));
+    color:#e7dfc9;
+  }
+
+  .detail-divider{ height:1px; background:#33291a; margin:22px 0; position:relative; z-index:1; }
+  .note-label{ font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:#a89b78; margin-bottom:8px; position:relative; z-index:1; }
+  .note-text{ font-size:13px; line-height:1.6; color:#c7bd9f; position:relative; z-index:1; }
+
+  .prompt-box{
+    background:rgba(8,6,3,.55); border:1px solid var(--accent-border-soft, #332a1a); border-radius:12px; padding:16px;
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; line-height:1.55; color:#d8cdb0;
+    max-height:340px; overflow-y:auto; white-space:pre-wrap; margin-bottom:14px;
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); position:relative; z-index:1;
+  }
+  .prompt-box::-webkit-scrollbar{ width:8px; }
+  .prompt-box::-webkit-scrollbar-thumb{ background:#3c3322; border-radius:4px; }
+
+  .context-line{
+    font-size:13px; color:#f1ecdd; line-height:1.55; margin-bottom:20px; padding:12px 14px;
+    background:var(--accent-soft-dark, rgba(201,154,60,.16)); border-left:2px solid var(--accent, var(--gold)); border-radius:6px;
+    position:relative; z-index:1; backdrop-filter:blur(6px);
+  }
+  .badge-row, .detail-eyebrow, .detail-title, .detail-blurb, .detail-crumb{ position:relative; z-index:1; }
+
+  /* ---- notes ---- */
+  .badge-row-right{ display:flex; align-items:center; gap:10px; }
+  .notes-btn{
+    display:inline-flex; align-items:center; gap:5px; position:relative; z-index:1;
+    background:linear-gradient(135deg,#ffe066,#ffc93c); color:#3a2c05;
+    border:1px solid rgba(255,255,255,.6); border-radius:999px;
+    font-family:'Inter',sans-serif; font-size:11px; font-weight:800; letter-spacing:.3px; text-transform:uppercase;
+    padding:6px 12px; cursor:pointer;
+    box-shadow:0 4px 14px rgba(255,193,60,.4), inset 0 1px 0 rgba(255,255,255,.65);
+    transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+  }
+  .notes-btn:hover{ transform:translateY(-1.5px); filter:brightness(1.06); box-shadow:0 8px 20px rgba(255,193,60,.5), inset 0 1px 0 rgba(255,255,255,.7); }
+  .notes-btn:active{ transform:translateY(0); }
+  .notes-btn.has-note{ background:linear-gradient(135deg,#ffd23f,#ff9f1c); box-shadow:0 4px 16px rgba(255,159,28,.55), inset 0 1px 0 rgba(255,255,255,.6); }
+  .notes-wrap{ margin-bottom:20px; position:relative; z-index:1; animation: cardIn .25s ease; }
+  .notes-toolbar{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+  .notes-tool-btn{
+    background:rgba(255,255,255,.9); border:1px solid #ffd23f; border-radius:8px;
+    color:#3a2c05; font-family:'Inter',sans-serif; font-size:12.5px; font-weight:700;
+    padding:6px 11px; cursor:pointer; line-height:1;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
+    transition:transform .12s ease, background .12s ease, box-shadow .12s ease;
+  }
+  .notes-tool-btn:hover{ background:#fff3c4; transform:translateY(-1px); }
+  .notes-tool-btn:active{ transform:translateY(0); }
+  .notes-tool-btn.hl-btn{ background:#ffe066; }
+  .notes-tool-btn.clear-btn{ background:rgba(255,255,255,.65); font-weight:600; }
+  .notes-area{
+    width:100%; min-height:220px; max-height:520px; overflow-y:auto; resize:vertical;
+    box-sizing:border-box; background:#fffbe6; border:2px solid #ffd23f; border-radius:12px;
+    padding:16px 18px; font-family:'Inter',sans-serif; line-height:1.6; color:#3a2c05;
+    box-shadow:0 8px 22px rgba(255,193,60,.28), inset 0 1px 0 rgba(255,255,255,.7);
+  }
+  .notes-area:focus{ outline:none; border-color:#ffb700; box-shadow:0 0 0 3px rgba(255,193,60,.4); }
+  .notes-area:empty:before{ content:attr(data-placeholder); color:#a98a2e; pointer-events:none; }
+  .notes-save-hint{ font-size:10.5px; color:#a89b78; margin-top:6px; }
+
+  /* ---- notes modal (OneNote-style, 2/3-screen editor) ---- */
+  .notes-modal-backdrop{
+    position:fixed; inset:0; background:rgba(10,8,4,.55); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
+    display:none; align-items:center; justify-content:center; z-index:500; padding:24px;
+  }
+  .notes-modal-backdrop.open{ display:flex; }
+  .notes-modal{
+    width:82vw; height:82vh; min-width:680px; min-height:480px; max-width:97vw; max-height:95vh;
+    background:#ffffff; color:#1f1f1f; border-radius:10px; border:1px solid #d7d7d7;
+    box-shadow:0 30px 80px rgba(0,0,0,.45);
+    display:flex; flex-direction:column; overflow:hidden;
+    animation: cardIn .25s cubic-bezier(.16,1,.3,1);
+    font-family:'Inter',sans-serif;
+    resize:both;
+  }
+  @media (max-width:900px){ .notes-modal{ width:96vw; height:92vh; min-width:0; resize:none; } }
+
+  /* ribbon */
+  .onenote-ribbon{
+    display:flex; align-items:flex-start; gap:0; padding:10px 10px 0; background:#fff;
+    border-bottom:1px solid #e3e3e3; flex:none; overflow-x:auto;
+  }
+  .ribbon-group{ display:flex; flex-direction:column; align-items:center; padding:0 10px; flex:none; }
+  .ribbon-group-row{ display:flex; gap:2px; align-items:center; }
+  .ribbon-stack{ display:flex; flex-direction:column; align-items:stretch; gap:1px; }
+  .ribbon-label{ font-size:10.5px; color:#767676; margin-top:auto; padding-top:6px; padding-bottom:2px; white-space:nowrap; }
+  .ribbon-sep{ width:1px; align-self:stretch; background:#e3e3e3; margin:2px 6px 18px; flex:none; }
+  .ribbon-btn{
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    background:none; border:none; cursor:pointer; padding:5px 9px; border-radius:4px;
+    font-family:'Inter',sans-serif; font-size:11px; color:#333; line-height:1.1;
+  }
+  .ribbon-btn:hover{ background:#f1f1f1; }
+  .ribbon-btn.active-style{ background:#e6f0fa; }
+  .ribbon-icon{ font-size:18px; }
+  .ribbon-line-btn{
+    display:flex; align-items:center; gap:6px; background:none; border:none; cursor:pointer;
+    font-size:12px; color:#333; padding:3px 8px; border-radius:4px; text-align:left; white-space:nowrap;
+  }
+  .ribbon-line-btn:hover{ background:#f1f1f1; }
+  .ribbon-close-wrap{ margin-left:auto; display:flex; align-items:flex-start; padding:2px 6px 0; flex:none; }
+  .notes-modal-close{
+    flex:none; width:30px; height:30px; border-radius:50%; border:1px solid #dcdcdc;
+    background:#fafafa; color:#444; font-size:14px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .notes-modal-close:hover{ background:#eee; transform:rotate(90deg); }
+
+  /* section tabs */
+  .onenote-tabs{
+    display:flex; align-items:flex-end; gap:6px; padding:10px 16px 0; background:#f4f4f4;
+    border-bottom:3px solid var(--tab-accent,#c0525b); flex:none; overflow-x:auto;
+  }
+  .onenote-notebook{
+    display:flex; align-items:center; gap:6px; font-family:'Inter',sans-serif; font-weight:600; font-size:13px;
+    color:#333; padding:8px 10px 10px; white-space:nowrap;
+  }
+  .onenote-tab{
+    padding:8px 16px; border-radius:8px 8px 0 0; font-size:12.5px; font-weight:600; color:#4a4a4a;
+    white-space:nowrap; background:#e4e4e4;
+  }
+  .onenote-tab.active{ background:#fff; color:#1f1f1f; }
+
+  /* page body */
+  .notes-modal-body{ flex:1; min-height:0; padding:30px 46px 12px; overflow-y:auto; background:#fff; display:block; }
+  .onenote-page-title{
+    font-family:'Inter',sans-serif; font-weight:300; font-size:38px; color:#1f1f1f;
+    border-bottom:1px solid #cfcfcf; padding-bottom:12px; margin-bottom:6px; line-height:1.15;
+  }
+  .onenote-page-meta{ display:flex; gap:22px; font-size:12.5px; color:#8a8a8a; margin-bottom:26px; }
+  .notes-modal-body .notes-area{
+    flex:none; width:100%; min-height:340px; max-height:none; resize:none;
+    background:#fff; border:none; border-radius:0; box-shadow:none; padding:0;
+    color:#1f1f1f; font-size:16px; line-height:1.75;
+  }
+  .notes-modal-body .notes-area:focus{ outline:none; box-shadow:none; border-color:transparent; }
+  .notes-modal-body .notes-area:empty:before{ color:#a3a3a3; }
+  .notes-modal-body .notes-area ul, .notes-modal-body .notes-area ol{ padding-left:26px; margin:8px 0; }
+  .notes-modal-body .notes-area li{ margin:4px 0; }
+  .notes-modal-body .note-code-block{
+    background:#1e1e1e; color:#d4d4d4; font-family:'Consolas','Menlo','Monaco',monospace; font-size:13.5px;
+    line-height:1.55; padding:14px 16px; border-radius:8px; overflow-x:auto; margin:14px 0;
+    white-space:pre; tab-size:4;
+  }
+  .notes-modal-body .note-code-block code{ background:none; color:inherit; font-family:inherit; white-space:inherit; }
+
+  .notes-modal-footer{
+    display:flex; align-items:center; justify-content:space-between; gap:12px; flex:none;
+    padding:12px 22px 16px; background:#fff; border-top:1px solid #eee;
+  }
+  .notes-save-btn{
+    background:#2b6cb0; color:#fff; border:1px solid #2b6cb0;
+    font-family:'Inter',sans-serif; font-weight:700; font-size:13px; letter-spacing:.2px;
+    padding:9px 22px; border-radius:6px; cursor:pointer;
+    transition:transform .15s ease, filter .15s ease, background .15s ease;
+  }
+  .notes-save-btn:hover{ transform:translateY(-1px); filter:brightness(1.08); }
+  .notes-save-btn:active{ transform:translateY(0); }
+  .notes-save-btn.saved{ background:#3f9142; border-color:#3f9142; }
+  .notes-save-hint{ color:#9a9a9a; }
+
+  footer.foot{ text-align:center; padding:26px; font-size:12px; color:var(--ink-faint); }
+
+  /* ---- auth gate ---- */
+  .auth-gate{
+    position:fixed; inset:0; z-index:1000; background:linear-gradient(160deg,#1c2b3a,#0f1720);
+    display:none; align-items:center; justify-content:center; padding:24px; overflow-y:auto;
+  }
+  .auth-gate.open{ display:flex; }
+  .auth-card{
+    width:100%; max-width:380px; background:var(--card-alt); color:var(--ink);
+    border-radius:var(--radius); padding:28px 26px; box-shadow:0 30px 80px rgba(0,0,0,.5);
+    animation: cardIn .25s cubic-bezier(.16,1,.3,1); margin:auto;
+  }
+  .auth-brand{ display:flex; align-items:center; gap:8px; font-weight:700; font-size:14px; color:var(--ink-soft); margin-bottom:14px; }
+  .auth-card h2{ margin:0 0 6px; font-size:22px; font-family:'Fraunces',serif; }
+  .auth-sub{ margin:0 0 18px; font-size:13px; color:var(--ink-soft); line-height:1.5; }
+  .auth-label{ display:block; font-size:11.5px; font-weight:600; color:var(--ink-soft); margin:12px 0 4px; }
+  .auth-input{
+    width:100%; padding:10px 12px; border-radius:8px; border:1px solid var(--line);
+    font-family:'Inter',sans-serif; font-size:14px; background:#fff; color:var(--ink);
+  }
+  .auth-input:focus{ outline:2px solid var(--gold); outline-offset:1px; }
+  .auth-error{ color:#b3362c; font-size:12.5px; margin-top:8px; min-height:1px; display:none; }
+  .auth-primary-btn{
+    width:100%; margin-top:16px; padding:11px; border-radius:8px; border:none; cursor:pointer;
+    background:linear-gradient(135deg,#ffd23f,#ff9f1c); color:#3a2c05; font-weight:800; font-size:14px;
+  }
+  .auth-primary-btn:disabled{ opacity:.6; cursor:default; }
+  .auth-link-btn{
+    width:100%; margin-top:10px; padding:6px; border:none; background:none; cursor:pointer;
+    color:var(--gold-deep); font-size:12.5px; font-weight:600;
+  }
+  .auth-divider{ display:flex; align-items:center; gap:10px; margin:18px 0; color:var(--ink-faint); font-size:11.5px; }
+  .auth-divider::before, .auth-divider::after{ content:''; flex:1; height:1px; background:var(--line); }
+  .auth-google-btn{
+    width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+    padding:10px; border-radius:8px; border:1px solid var(--line); background:#fff; cursor:pointer;
+    font-family:'Inter',sans-serif; font-weight:600; font-size:13.5px; color:var(--ink);
+  }
+  .auth-google-btn:disabled{ opacity:.6; cursor:default; }
+  .auth-guest-btn{
+    width:100%; margin-top:10px; padding:10px; border-radius:8px; border:1px dashed var(--line);
+    background:none; cursor:pointer; font-size:13px; color:var(--ink-soft); font-weight:600;
+  }
+  .auth-guest-btn:disabled{ opacity:.6; cursor:default; }
+  .auth-fine{ margin:14px 0 0; font-size:11px; color:var(--ink-faint); line-height:1.5; }
+
+  /* ---- account box (navbar) ---- */
+  .account-box{ display:flex; align-items:center; gap:10px; }
+  .account-email{ font-size:12.5px; color:#cfd8e0; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .account-signout{
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); color:#f2ede0;
+    font-size:12px; font-weight:600; padding:6px 12px; border-radius:999px; cursor:pointer;
+  }
+  .account-signout:hover{ background:rgba(255,255,255,.2); }
+
+</style>
+</head>
+<body>
+<div class="auth-gate open" id="authGate">
+  <div class="auth-card">
+    <div class="auth-brand">☕ <span>softwareOneStop</span></div>
+    <h2 id="authTitle">Welcome back</h2>
+    <p class="auth-sub">Sign in to save your progress and notes to the cloud, so they follow you across every device.</p>
+    <div id="authForm" data-mode="signin">
+      <label class="auth-label">Email</label>
+      <input type="email" id="authEmail" class="auth-input" placeholder="you@example.com" autocomplete="email">
+      <label class="auth-label">Password</label>
+      <input type="password" id="authPassword" class="auth-input" placeholder="••••••••" autocomplete="current-password">
+      <div class="auth-error" id="authError"></div>
+      <button class="auth-primary-btn" id="authSubmitBtn" type="button">Sign in</button>
+      <button class="auth-link-btn" id="authToggleMode" type="button">Need an account? Sign up</button>
+    </div>
+    <div class="auth-divider"><span>or</span></div>
+    <button class="auth-google-btn" id="authGoogleBtn" type="button">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.61z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.19l-2.92-2.26c-.81.55-1.85.87-3.04.87-2.34 0-4.32-1.58-5.03-3.71H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.97 10.71a5.4 5.4 0 0 1 0-3.42V4.96H.96a9 9 0 0 0 0 8.08l3.01-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.96l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58z"/></svg>
+      Continue with Google
+    </button>
+    <button class="auth-guest-btn" id="authGuestBtn" type="button">Continue as guest</button>
+    <p class="auth-fine">Guest sessions still save to the cloud, but won't follow you to a new browser. Sign in with email or Google to sync everywhere.</p>
+  </div>
+</div>
+
+
+<header class="navbar">
+  <div class="brand">
+    <div class="brand-mark">☕</div>
+    <div class="brand-name"><span class="bn-soft">software</span><span class="bn-one">One</span><span class="bn-stop">Stop</span></div>
+  </div>
+  <a class="nav-link" href="#" onclick="return false;">Home</a>
+  <div class="account-box" id="accountBox" style="display:none;">
+    <span class="account-email" id="accountEmail"></span>
+    <button class="account-signout" id="signOutBtn" type="button">Sign out</button>
+  </div>
+</header>
+
+<div class="shell">
+
+  <div class="eyebrow">EXPLORE ROADMAPS</div>
+  <div class="track-tabs">
+    <button class="track-tab active" data-track="java" onclick="selectTrack('java')">Java &amp; Spring Boot</button>
+    <button class="track-tab" data-track="web" onclick="selectTrack('web')">Web Foundations</button>
+    <button class="track-tab" onclick="toast('Databases roadmap — coming soon')">Databases <span class="soon">soon</span></button>
+    <button class="track-tab" onclick="toast('System Design roadmap — coming soon')">System Design <span class="soon">soon</span></button>
+    <button class="track-tab" onclick="toast('DevOps roadmap — coming soon')">DevOps &amp; Cloud <span class="soon">soon</span></button>
+  </div>
+
+  <div class="hero-row">
+    <div>
+      <h1>Your stack, <em>compiled.</em></h1>
+      <p class="hero-sub">Follow the trail from bytecode to production. Every stop has a ready-to-paste Claude study prompt behind it — no other source required.</p>
+    </div>
+    <div class="hero-actions">
+      <div class="legend-wrap">
+        <button class="pill-btn" onclick="toggleLegend()">🎨 Legend</button>
+        <div class="legend-pop" id="legendPop">
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-web)"></span> Web</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-angular)"></span> Angular</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-react)"></span> React</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-core)"></span> Core Java</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-oop)"></span> OOP</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-spring)"></span> Spring</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-data)"></span> Data</div>
+          <div class="legend-item"><span class="legend-dot" style="background:var(--era-advanced)"></span> Advanced</div>
+        </div>
+      </div>
+      <button class="pill-btn" onclick="resetProgress()">↺ Reset</button>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- COLUMN 1: TRAIL -->
+    <div class="card" id="trailCard">
+      <div class="trail-head">
+        <div class="trail-icon" id="trailIcon">☕</div>
+        <div>
+          <div class="trail-title" id="trailTitleText">Java &amp; Spring trail</div>
+          <div class="trail-meta" id="trailMeta">14 WAYPOINTS · ONE MAP</div>
+        </div>
+      </div>
+      <input class="search-input" id="searchInput" type="text" placeholder="Find a waypoint…" oninput="renderTrail()">
+      <div class="chip-row" id="chipRow"></div>
+      <div id="groupList"></div>
+    </div>
+
+    <!-- COLUMN 2: SUBTOPICS -->
+    <div class="card card-alt" id="subCard">
+      <div class="sub-head">
+        <div class="sub-head-title" id="subHeadTitle">SUBTOPICS</div>
+        <div class="sub-progress" id="subProgress"></div>
+      </div>
+      <div id="subList"></div>
+    </div>
+
+    <!-- COLUMN 3: DETAIL -->
+    <div class="detail" id="detailPanel"></div>
+
+  </div>
+</div>
+
+<!-- NOTES MODAL (OneNote-style) -->
+<div class="notes-modal-backdrop" id="notesBackdrop" onclick="if(event.target===this) closeNotes()">
+  <div class="notes-modal">
+
+    <!-- Ribbon -->
+    <div class="onenote-ribbon">
+      <div class="ribbon-group">
+        <div class="ribbon-group-row">
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('paste')" title="Paste">
+            <span class="ribbon-icon">📋</span><span>Paste</span>
+          </button>
+          <div class="ribbon-stack">
+            <button type="button" class="ribbon-line-btn" onmousedown="event.preventDefault()" onclick="formatNote('cut')" title="Cut">✂️ Cut</button>
+            <button type="button" class="ribbon-line-btn" onmousedown="event.preventDefault()" onclick="formatNote('copy')" title="Copy">📄 Copy</button>
+            <button type="button" class="ribbon-line-btn" onmousedown="event.preventDefault()" onclick="formatNote('removeFormat')" title="Format Painter / Clear">🖌️ Format Painter</button>
+          </div>
+        </div>
+        <div class="ribbon-label">Clipboard</div>
+      </div>
+
+      <div class="ribbon-sep"></div>
+
+      <div class="ribbon-group">
+        <div class="ribbon-group-row">
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('bold')" title="Bold"><b>B</b></button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('italic')" title="Italic"><i>I</i></button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('underline')" title="Underline"><u>U</u></button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('strikeThrough')" title="Strikethrough"><s>ab</s></button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('highlight')" title="Highlight">🖍️</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('insertUnorderedList')" title="Bulleted list">• ≡</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('insertOrderedList')" title="Numbered list">1.≡</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="changeNoteFontSize(-1)" title="Smaller text">A−</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="changeNoteFontSize(1)" title="Larger text">A+</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="formatNote('removeFormat')" title="Clear formatting">A<span style="color:#c0392b">✕</span></button>
+        </div>
+        <div class="ribbon-label">Basic Text</div>
+      </div>
+
+      <div class="ribbon-sep"></div>
+
+      <div class="ribbon-group">
+        <div class="ribbon-group-row">
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="setNoteHeading('H1')" title="Heading 1" style="font-size:14px;color:#2b6cb0;font-weight:700;">H1</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="setNoteHeading('H2')" title="Heading 2" style="font-size:13px;color:#2b6cb0;font-weight:700;">H2</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="setNoteHeading('P')" title="Paragraph" style="font-size:12px;">¶</button>
+          <button type="button" class="ribbon-btn" onmousedown="event.preventDefault()" onclick="insertCodeBlock()" title="Format selected text as a highlighted code block" style="font-family:monospace;font-size:12px;">&lt;/&gt;</button>
+        </div>
+        <div class="ribbon-label">Styles</div>
+      </div>
+
+      <div class="ribbon-close-wrap">
+        <button class="notes-modal-close" onclick="closeNotes()" title="Close">✕</button>
+      </div>
+    </div>
+
+    <!-- Section tabs -->
+    <div class="onenote-tabs" id="notesTabsBar">
+      <div class="onenote-notebook" id="notesNotebook">📓 <span id="notesNotebookName">Notebook</span></div>
+      <div class="onenote-tab" id="notesTabCrumb"></div>
+      <div class="onenote-tab active" id="notesTabActive"></div>
+    </div>
+
+    <!-- Page -->
+    <div class="notes-modal-body">
+      <div class="onenote-page-title" id="notesTitle"></div>
+      <div class="onenote-page-meta">
+        <span id="notesDate"></span>
+        <span id="notesTime"></span>
+      </div>
+      <div id="notesArea" class="notes-area" contenteditable="true" spellcheck="true"
+        data-placeholder="Type your notes here… saved automatically."
+        oninput="onNoteInput(this)" onpaste="handleNotePaste(event)"></div>
+    </div>
+
+    <div class="notes-modal-footer">
+      <div class="notes-save-hint">💾 Saved locally in this browser only.</div>
+      <button class="notes-save-btn" id="notesSaveBtn" onclick="manualSaveNotes()">Save</button>
+    </div>
+  </div>
+</div>
+
+<footer class="foot">Built for self-paced Web, Java &amp; Spring Boot revision — progress saves automatically on this device.</footer>
+
+<script>
+/* ---------------------------------------------------------------
+   DATA
+--------------------------------------------------------------- */
+const webTopics = [
+  { id:15, era:'web', icon:'📄', title:'HTML5 & Semantic Markup', group:'frontend',
+    blurb:'The skeleton every page is built on. Structure it right and accessibility, SEO and styling all get easier.',
+    subtopics:[
+      {name:'HTML Document Structure & Doctype', context:'the html/head/body skeleton, the doctype declaration, and how it affects browser rendering modes'},
+      {name:'Semantic Elements', context:'header, nav, main, article, section and footer, and their accessibility and SEO benefits over generic divs'},
+      {name:'Forms & Input Types', context:'form elements, HTML5 input types, validation attributes, and the constraint validation API'},
+      {name:'Tables & Data Markup', context:'table/thead/tbody, colspan/rowspan, and when a table is actually the right tool'},
+      {name:'Media Elements', context:'img, picture, srcset, video and audio elements, and responsive image techniques'},
+      {name:'Links, Navigation & Anchors', context:'anchor tag attributes, relative vs absolute URLs, and fragment/hash navigation'},
+      {name:'Accessibility (ARIA) Fundamentals', context:'ARIA roles, landmarks, alt text, and keyboard navigation basics for screen readers'},
+      {name:'Meta Tags & SEO Basics', context:'meta viewport, description, and Open Graph tags, and how they affect search and social previews'},
+      {name:'HTML5 Storage & Browser APIs', context:'localStorage/sessionStorage, the drag-and-drop API, and basic Canvas element usage'}
+    ]},
+  { id:16, era:'web', icon:'🎨', title:'CSS3 & Modern Styling', group:'frontend',
+    blurb:'How raw markup becomes an actual interface — the cascade, the box model, and the layout systems built on top of them.',
+    subtopics:[
+      {name:'CSS Selectors & Specificity', context:'selector types, specificity calculation, and how the cascade resolves conflicting rules'},
+      {name:'Box Model & Layout Basics', context:'content/padding/border/margin, box-sizing, and the difference between block and inline elements'},
+      {name:'Flexbox', context:'flex-container and flex-item properties, the main/cross axis model, and common one-dimensional layout patterns'},
+      {name:'CSS Grid', context:'grid-template-columns/rows, named grid areas, and when to reach for Grid over Flexbox'},
+      {name:'Responsive Design & Media Queries', context:'mobile-first design, breakpoint strategy, and viewport-relative units (vw/vh/rem)'},
+      {name:'CSS Variables & Custom Properties', context:'defining and scoping --custom-properties, and using them for theming'},
+      {name:'Transitions & Animations', context:'transition properties, @keyframes animation, and performance considerations (transform/opacity vs layout properties)'},
+      {name:'Positioning & Stacking Context', context:'static/relative/absolute/fixed/sticky positioning, and how z-index stacking contexts actually work'},
+      {name:'CSS Architecture & Preprocessors', context:'BEM naming conventions, utility-first CSS, and Sass/SCSS fundamentals (variables, nesting, mixins)'}
+    ]},
+  { id:17, era:'web', icon:'⚡', title:'JavaScript Fundamentals & DOM', group:'frontend',
+    blurb:'The language that makes a page interactive — and the DOM APIs that connect your code to what the user actually sees.',
+    subtopics:[
+      {name:'Variables, Scope & Hoisting', context:'var/let/const differences, block scope, and the temporal dead zone'},
+      {name:'Data Types & Type Coercion', context:'primitives vs objects, truthy/falsy values, and the difference between == and ==='},
+      {name:'Functions & Closures', context:'function declarations vs expressions, arrow functions, and how closures work in practice'},
+      {name:'The DOM & Event Handling', context:'querySelector/querySelectorAll, DOM traversal, event listeners, and event bubbling vs capturing'},
+      {name:'Asynchronous JavaScript', context:'callbacks, Promises, async/await syntax, and how the event loop schedules async work'},
+      {name:'Array & Object Methods', context:'map/filter/reduce, destructuring assignment, and the spread/rest operators'},
+      {name:'ES6+ Language Features', context:'template literals, ES modules (import/export), and default/named parameters'},
+      {name:'Fetch API & Working with JSON', context:'making HTTP requests with fetch, handling responses, and structuring error handling'},
+      {name:'Error Handling & Debugging', context:'try/catch/finally, throwing custom Error subclasses, and using browser DevTools effectively'}
+    ]},
+  { id:18, era:'angular', icon:'🅰️', title:'Angular Fundamentals', group:'frameworks',
+    blurb:'A full, opinionated framework — components, DI and RxJS working together as one system rather than a pile of libraries.',
+    subtopics:[
+      {name:'Angular CLI & Project Structure', context:'ng new, workspace structure, angular.json configuration, and generating components/services with the CLI'},
+      {name:'Components & Templates', context:'the @Component decorator, template syntax, and lifecycle hooks like ngOnInit and ngOnDestroy'},
+      {name:'Data Binding', context:'interpolation, property binding, event binding, and two-way binding with ngModel'},
+      {name:'Directives', context:'structural directives (*ngIf, *ngFor), attribute directives (ngClass, ngStyle), and building custom directives'},
+      {name:'Services & Dependency Injection', context:'the @Injectable decorator, hierarchical injectors, and providedIn scoping'},
+      {name:'Angular Routing', context:'RouterModule, route guards, lazy-loaded feature modules, and reading route parameters'},
+      {name:'RxJS & Observables in Angular', context:'Observable fundamentals, common operators like map/switchMap/filter, and the async pipe'},
+      {name:'Reactive & Template-Driven Forms', context:'FormGroup/FormControl, built-in and custom validators, and comparing reactive vs template-driven forms'},
+      {name:'Signals & Standalone Components', context:'the newer Signals API for fine-grained reactivity, and standalone components without NgModules (Angular 14+)'}
+    ]},
+  { id:19, era:'react', icon:'⚛️', title:'React Fundamentals', group:'frameworks',
+    blurb:'A view library, not a framework — components and hooks as the building blocks, with everything else left to you.',
+    subtopics:[
+      {name:'JSX & Component Basics', context:'JSX syntax, functional vs class components, and how JSX compiles down to React.createElement calls'},
+      {name:'Props & Component Composition', context:'passing props, the children prop, and composing components instead of using inheritance'},
+      {name:'State with useState', context:'the useState hook, how state updates are batched, and functional state updates'},
+      {name:'The useEffect Hook', context:'handling side effects, the dependency array, and writing correct cleanup functions'},
+      {name:'Other Built-in Hooks', context:'useContext, useRef, useMemo and useCallback, and when each one is actually needed'},
+      {name:'Conditional Rendering & Lists', context:'common rendering patterns, and why stable, unique keys matter when rendering lists'},
+      {name:'React Router', context:'client-side routing with react-router-dom, nested routes, and reading route parameters'},
+      {name:'State Management Options', context:'lifting state up, the Context API, and when to reach for a library like Redux or Zustand'},
+      {name:'Performance Optimization', context:'React.memo, avoiding unnecessary re-renders, and code-splitting with React.lazy'}
+    ]}
+];
+
+const topics = [
+  { id:1, era:'core', icon:'☕', title:'Java Platform & Language Basics', group:'foundations',
+    blurb:'The ground floor: how Java compiles and runs, and the syntax every program is built from. Skip this and everything else wobbles.',
+    subtopics:[
+      {name:'JDK, JRE & JVM Architecture', context:'compilation to bytecode, class loading, and the role of the JVM in platform independence'},
+      {name:'Data Types, Variables & Type Casting', context:'primitives vs reference types, widening/narrowing conversions, autoboxing pitfalls'},
+      {name:'Operators & Control Flow', context:'arithmetic, relational and bitwise operators, enhanced switch expressions (Java 14+)'},
+      {name:'Arrays & Multidimensional Arrays', context:'array memory layout, the Arrays utility class, jagged arrays'},
+      {name:'Methods, Overloading & Varargs', context:'pass-by-value semantics, overload resolution, varargs internals'},
+      {name:'String, StringBuilder & StringBuffer', context:'the String pool, immutability, and StringBuilder vs StringBuffer performance'},
+      {name:'Packages & Access Modifiers', context:'public/protected/default/private visibility rules and package structure conventions'},
+      {name:'Static & Final Keywords', context:'static blocks, static nested classes, and final variables/methods/classes'}
+    ]},
+  { id:2, era:'oop', icon:'🧩', title:'Classes & Objects', group:'foundations',
+    blurb:'The basic building block of every Java program — how state and behavior get bundled together.',
+    subtopics:[
+      {name:'Defining Classes — Fields, Methods, Constructors', context:'class syntax, instance fields, method definitions, and constructor chaining with this() and super()'},
+      {name:'Creating Objects with the new Keyword', context:'object instantiation, the heap vs the stack, and what actually happens during object creation'},
+      {name:'this Keyword — Referencing the Instance', context:'using this to distinguish instance fields from parameters, and passing the current object as a reference'},
+      {name:'Instance vs Static Members', context:'instance variables/methods vs static (class-level) members, and when static is actually appropriate'},
+      {name:'Method Overloading — Same Name, Different Params', context:'overload resolution rules, and how the compiler picks the right overload at compile time'}
+    ]},
+  { id:20, era:'oop', icon:'🧬', title:'Inheritance in Java', group:'foundations',
+    blurb:'How classes build on other classes — and where that power quietly turns into a design trap.',
+    subtopics:[
+      {name:'The extends Keyword & Single Inheritance', context:'Java\'s single-inheritance model for classes, and why it was designed that way'},
+      {name:'Method Overriding Rules', context:'the @Override annotation, covariant return types, and access-modifier rules when overriding'},
+      {name:'super Keyword — Calling Parent Members', context:'invoking a superclass constructor or method explicitly with super'},
+      {name:'The Liskov Substitution Principle', context:'what it means for a subclass to be truly substitutable for its parent, with concrete violations'},
+      {name:'Composition over Inheritance', context:'when favoring "has-a" composition leads to more flexible designs than "is-a" inheritance'}
+    ]},
+  { id:21, era:'oop', icon:'🎭', title:'Polymorphism in Java', group:'foundations',
+    blurb:'The same method call, different behavior — resolved either at compile time or at runtime.',
+    subtopics:[
+      {name:'Compile-Time Polymorphism (Overloading)', context:'how the compiler resolves overloaded methods based on argument types at compile time'},
+      {name:'Runtime Polymorphism (Overriding)', context:'dynamic method dispatch, and how the JVM decides which overridden method actually runs'},
+      {name:'Upcasting & Downcasting', context:'implicit upcasting to a supertype, explicit downcasting, and the instanceof check'},
+      {name:'Virtual Method Invocation Internals', context:'the vtable-like mechanism the JVM uses to dispatch overridden methods'},
+      {name:'Polymorphism with Interfaces', context:'programming to an interface type, and how it enables swapping implementations cleanly'}
+    ]},
+  { id:22, era:'oop', icon:'🔲', title:'Abstraction — Abstract Classes & Interfaces', group:'foundations',
+    blurb:'Hiding the "how" behind a clean "what" — and knowing exactly when to reach for which tool.',
+    subtopics:[
+      {name:'Abstract Classes & Abstract Methods', context:'declaring abstract classes/methods, and why an abstract class can\'t be instantiated'},
+      {name:'Interfaces & Multiple Inheritance of Type', context:'defining interfaces, implementing multiple interfaces, and how Java avoids the diamond problem'},
+      {name:'Default & Static Interface Methods', context:'Java 8+ default and static methods on interfaces, and their impact on API evolution'},
+      {name:'Abstract Class vs Interface — When to Use Which', context:'concrete decision criteria based on shared state, multiple inheritance needs, and API design'},
+      {name:'Functional Interfaces & Lambda Compatibility', context:'the @FunctionalInterface contract, and how it enables lambda expressions'}
+    ]},
+  { id:23, era:'oop', icon:'🔐', title:'Encapsulation, Object Contracts & Design Patterns', group:'foundations',
+    blurb:'Protecting internal state, honoring Java\'s object contracts, and the reusable patterns senior engineers reach for by habit.',
+    subtopics:[
+      {name:'Encapsulation with Access Modifiers', context:'private/protected/public/default, getters/setters, and why exposing raw fields is risky'},
+      {name:'Designing Immutable Classes', context:'final fields, defensive copying, and the builder pattern for complex immutable objects'},
+      {name:'equals(), hashCode() & toString()', context:'the equals-hashCode contract, common bugs from breaking it, and IDE/Lombok-generated implementations'},
+      {name:'SOLID Principles in Java', context:'applying SRP, OCP, LSP, ISP and DIP with concrete before/after Java examples'},
+      {name:'Common Design Patterns', context:'Singleton, Factory, Builder, Strategy and Observer implemented in idiomatic Java'}
+    ]},
+  { id:3, era:'core', icon:'⚠️', title:'Exception Handling', group:'foundations',
+    blurb:'Failure is a feature, not an accident. How Java models it, and how to not swallow it.',
+    subtopics:[
+      {name:'Checked vs Unchecked Exceptions', context:'the Exception hierarchy, and when to use checked vs runtime exceptions'},
+      {name:'try-catch-finally & Multi-catch', context:'execution order, and the tricky case of finally with a return statement'},
+      {name:'try-with-resources & AutoCloseable', context:'automatic resource management and suppressed exceptions'},
+      {name:'Custom Exceptions & Exception Chaining', context:'designing a meaningful exception hierarchy for a real application'},
+      {name:'Exception Handling Best Practices', context:'avoiding swallowed exceptions, logging vs rethrowing, fail-fast design'}
+    ]},
+  { id:4, era:'core', icon:'📦', title:'Collections Framework', group:'foundations',
+    blurb:'The data structures behind almost every Java method signature — and their internal trade-offs.',
+    subtopics:[
+      {name:'Collections Framework Overview', context:'the List/Set/Map/Queue interface hierarchy and how they relate'},
+      {name:'ArrayList vs LinkedList vs Vector', context:'internal array resizing vs doubly linked list, and their time-complexity trade-offs'},
+      {name:'HashMap Internals', context:'hashing, buckets, treeification in Java 8+, load factor and resizing'},
+      {name:'TreeMap, TreeSet & Sorted Collections', context:'the Red-Black tree backing, natural ordering vs a custom Comparator'},
+      {name:'Comparable vs Comparator', context:'the compareTo() contract and Comparator chaining with thenComparing()'},
+      {name:'Concurrent Collections', context:'ConcurrentHashMap and CopyOnWriteArrayList, and when to reach for them over synchronized collections'},
+      {name:'Iterators & Fail-Fast Behaviour', context:'ConcurrentModificationException, and fail-fast vs fail-safe iterators'}
+    ]},
+  { id:5, era:'core', icon:'λ', title:'Java 8+ Functional Programming', group:'foundations',
+    blurb:'The shift from imperative loops to declarative pipelines — and the interface types that make it possible.',
+    subtopics:[
+      {name:'Lambda Expressions', context:'syntax, effectively-final captured variables, lambda vs anonymous inner class'},
+      {name:'Functional Interfaces', context:'Function, Consumer, Supplier, Predicate and BiFunction from java.util.function'},
+      {name:'Streams API Fundamentals', context:'intermediate vs terminal operations, and why streams evaluate lazily'},
+      {name:'Stream Collectors & Grouping', context:'Collectors.toList/groupingBy/partitioningBy/joining in practice'},
+      {name:'The Optional Class', context:'avoiding NullPointerException, and common Optional anti-patterns'},
+      {name:'Method References', context:'the four kinds of method references and when each one is idiomatic'}
+    ]},
+  { id:6, era:'core', icon:'🧵', title:'Multithreading & Concurrency', group:'foundations',
+    blurb:'Where subtle bugs live. Understanding this well is what separates "it compiles" from "it scales."',
+    subtopics:[
+      {name:'Thread Lifecycle & Creation', context:'extending Thread vs implementing Runnable, and the thread state machine'},
+      {name:'Synchronization & Locks', context:'the synchronized keyword, intrinsic locks, and ReentrantLock'},
+      {name:'Executor Framework', context:'ExecutorService, thread pool sizing, and Future'},
+      {name:'CompletableFuture & Async Programming', context:'composing async pipelines with thenApply/thenCompose/thenCombine'},
+      {name:'Volatile, Atomics & the Java Memory Model', context:'visibility vs atomicity, and AtomicInteger for lock-free counters'},
+      {name:'Common Concurrency Issues', context:'race conditions, deadlocks, and the producer-consumer pattern with BlockingQueue'}
+    ]},
+  { id:7, era:'spring', icon:'🌱', title:'Spring Core & Dependency Injection', group:'ecosystem',
+    blurb:'The IoC container is the idea everything else in Spring is built on top of. Get this right first.',
+    subtopics:[
+      {name:'IoC Container & Bean Lifecycle', context:'the ApplicationContext, bean instantiation, and init/destroy callbacks'},
+      {name:'Dependency Injection Types', context:'constructor vs setter vs field injection, and why constructor injection is preferred'},
+      {name:'Bean Scopes', context:'singleton, prototype, request and session scopes'},
+      {name:'Spring Configuration Styles', context:'XML config, Java @Configuration classes, and component scanning with @ComponentScan'},
+      {name:'Spring AOP Basics', context:'aspects, advice types, @Aspect, and common uses like logging and transactions'},
+      {name:'Stereotype Annotations', context:'@Component, @Service, @Repository and @Controller, and their semantic differences'}
+    ]},
+  { id:8, era:'spring', icon:'🚀', title:'Spring Boot Fundamentals', group:'ecosystem',
+    blurb:'How Spring Boot removes the boilerplate — and what it is actually doing behind the "magic."',
+    subtopics:[
+      {name:'Spring Boot Starters & Auto-Configuration', context:'how @EnableAutoConfiguration works, and what starter POMs actually pull in'},
+      {name:'application.properties / application.yml', context:'externalized configuration and binding it with @ConfigurationProperties'},
+      {name:'Spring Boot Profiles', context:'environment-specific configuration with @Profile and spring.profiles.active'},
+      {name:'Spring Boot Actuator', context:'health checks, built-in metrics endpoints, and writing a custom actuator endpoint'},
+      {name:'Spring Boot DevTools & Hot Reload', context:'developer-productivity tooling for faster local iteration'},
+      {name:'Building a Spring Boot App from Scratch', context:'Spring Initializr, project structure, and the @SpringBootApplication annotation'}
+    ]},
+  { id:9, era:'spring', icon:'🌐', title:'Spring MVC & REST API Design', group:'ecosystem',
+    blurb:'Turning business logic into a well-designed HTTP contract that other services and clients can trust.',
+    subtopics:[
+      {name:'DispatcherServlet & the MVC Request Flow', context:'the front controller pattern and handler mapping'},
+      {name:'Building REST Controllers', context:'@RestController, @RequestMapping, and the @GetMapping/@PostMapping family'},
+      {name:'Request & Response Handling', context:'@RequestBody, @PathVariable, @RequestParam and ResponseEntity'},
+      {name:'DTOs & Data Validation', context:'separating entities from DTOs, and Bean Validation with @Valid'},
+      {name:'Global Exception Handling', context:'@ControllerAdvice and @ExceptionHandler for a consistent error response shape'},
+      {name:'API Versioning & Documentation', context:'URI/header versioning strategies, and OpenAPI/Swagger via springdoc'}
+    ]},
+  { id:10, era:'data', icon:'🗄️', title:'Spring Data JPA & Persistence', group:'ecosystem',
+    blurb:'Where most production performance bugs actually hide — the object-relational boundary.',
+    subtopics:[
+      {name:'JPA & Hibernate Fundamentals', context:'ORM concepts, the entity lifecycle, and the persistence context'},
+      {name:'Entity Mapping & Relationships', context:'@OneToMany, @ManyToOne, @ManyToMany, and fetch types (LAZY vs EAGER)'},
+      {name:'Spring Data Repositories', context:'JpaRepository, derived query methods, and paging/sorting'},
+      {name:'Custom Queries', context:'JPQL, native queries with @Query, and Specifications for dynamic filtering'},
+      {name:'Transaction Management', context:'@Transactional propagation and isolation levels, and rollback rules'},
+      {name:'The N+1 Problem & Performance', context:'identifying and fixing the N+1 query problem with fetch joins and batch fetching'}
+    ]},
+  { id:11, era:'spring', icon:'🔒', title:'Spring Security', group:'ecosystem',
+    blurb:'Locking the front door properly — authentication, authorization, and the filter chain that enforces both.',
+    subtopics:[
+      {name:'Authentication vs Authorization', context:'the Spring Security filter chain and the SecurityContext'},
+      {name:'Configuring Security with SecurityFilterChain', context:'the modern Spring Security 6 lambda-based configuration style'},
+      {name:'JWT-Based Stateless Authentication', context:'issuing and validating JWTs, and designing a refresh-token strategy'},
+      {name:'Method-Level Security', context:'@PreAuthorize, @PostAuthorize and role-based access control'},
+      {name:'OAuth2 & Social Login', context:'the OAuth2 authorization code flow with the Spring Security OAuth2 client'}
+    ]},
+  { id:12, era:'spring', icon:'✅', title:'Testing Spring Boot Applications', group:'ecosystem',
+    blurb:'Confidence to ship. Knowing which layer to test, and with which tool.',
+    subtopics:[
+      {name:'JUnit 5 Fundamentals', context:'test lifecycle annotations, assertions, and parameterized tests'},
+      {name:'Mockito for Unit Testing', context:'mocking dependencies, verifying interactions, and argument captors'},
+      {name:'@SpringBootTest & Test Slices', context:'full-context tests vs sliced tests like @WebMvcTest and @DataJpaTest'},
+      {name:'Testing REST Controllers with MockMvc', context:'simulating HTTP requests against a controller without starting a real server'},
+      {name:'Integration Testing with Testcontainers', context:'spinning up real Postgres/Kafka containers for realistic integration tests'}
+    ]},
+  { id:13, era:'advanced', icon:'☁️', title:'Microservices with Spring Cloud', group:'production',
+    blurb:'What changes when "the app" becomes "a fleet of services" — and the Spring Cloud toolkit for managing that.',
+    subtopics:[
+      {name:'Microservices Architecture Principles', context:'bounded contexts, database-per-service, and when NOT to reach for microservices'},
+      {name:'Service Discovery with Eureka', context:'client-side discovery and the service registry pattern'},
+      {name:'Centralized Config with Spring Cloud Config', context:'externalizing configuration consistently across many services'},
+      {name:'API Gateway Patterns', context:'Spring Cloud Gateway, and routing/filtering requests at the edge'},
+      {name:'Resilience with Circuit Breakers', context:'Resilience4j, and the circuit-breaker/retry/bulkhead patterns'},
+      {name:'Inter-Service Communication', context:'RestTemplate vs WebClient vs OpenFeign, and sync vs async messaging'}
+    ]},
+  { id:14, era:'advanced', icon:'🐳', title:'Deployment, Docker & DevOps', group:'production',
+    blurb:'Getting code from your laptop to something a real user can hit — reliably, and more than once.',
+    subtopics:[
+      {name:'Packaging Spring Boot Apps', context:'building executable JARs, and layered JARs for better Docker layer caching'},
+      {name:'Dockerizing a Spring Boot Application', context:'writing a multi-stage Dockerfile and optimizing image size'},
+      {name:'CI/CD Pipelines for Spring Boot', context:'a GitHub Actions pipeline that builds, tests, containerizes and deploys'},
+      {name:'Deploying to the Cloud', context:'deploying to AWS Elastic Beanstalk/ECS, Render, or Railway'},
+      {name:'Monitoring, Logging & Observability', context:'structured logging, Prometheus + Grafana, and the basics of distributed tracing'}
+    ]}
+];
+
+const javaGroups = [
+  {id:'foundations', num:'01', eyebrow:'WHERE IT BEGINS', name:'Java Foundations'},
+  {id:'ecosystem',   num:'02', eyebrow:'BUILDING THE STACK', name:'Spring Ecosystem'},
+  {id:'production',  num:'03', eyebrow:'GOING TO PRODUCTION', name:'Cloud & Production'}
+];
+const webGroups = [
+  {id:'frontend',   num:'01', eyebrow:'BEFORE THE BACKEND', name:'Web Foundations'},
+  {id:'frameworks', num:'02', eyebrow:'BUILDING INTERFACES', name:'Frontend Frameworks'}
+];
+
+const eraMeta = {
+  web:      {label:'Web',       hex:'#c1477a'},
+  angular:  {label:'Angular',   hex:'#dd2b3e'},
+  react:    {label:'React',     hex:'#2a93c4'},
+  core:     {label:'Core Java', hex:'#c99a3c'},
+  oop:      {label:'OOP',        hex:'#8a76c9'},
+  spring:   {label:'Spring',     hex:'#5fa06e'},
+  data:     {label:'Data',       hex:'#4f8fc0'},
+  advanced: {label:'Advanced',   hex:'#d97d4f'}
+};
+const groupColor = { frontend:eraMeta.web.hex, frameworks:'#6c5fc7', foundations:eraMeta.core.hex, ecosystem:eraMeta.spring.hex, production:eraMeta.advanced.hex };
+
+const tracks = {
+  java: { label:'Java & Spring Boot', icon:'☕', trailTitle:'Java &amp; Spring trail', topics:topics, groups:javaGroups, chips:['all','core','oop','spring','data','advanced'] },
+  web:  { label:'Web Foundations',    icon:'🌐', trailTitle:'Web foundations trail',  topics:webTopics, groups:webGroups, chips:['all','web','angular','react'] }
+};
+let currentTrackId = 'java';
+function cfg(){ return tracks[currentTrackId]; }
+
+function hexToRgb(hex){
+  hex = hex.replace('#','');
+  return { r:parseInt(hex.substring(0,2),16), g:parseInt(hex.substring(2,4),16), b:parseInt(hex.substring(4,6),16) };
+}
+function rgba(hex, a){ const c = hexToRgb(hex); return `rgba(${c.r},${c.g},${c.b},${a})`; }
+
+/* ---------------------------------------------------------------
+   STATE
+--------------------------------------------------------------- */
+let activeChip = 'all';
+let selectedTopicId = topics[0].id;
+let selectedSubIdx = null; // null = topic overview view
+let completed = new Set(); // ids like "3-2"
+let notes = {}; // key ("<track>-t-<topicId>" or "<track>-<topicId>-<subIdx>") -> note text
+let notesOpen = false;
+
+/* ---------------------------------------------------------------
+   PERSISTENCE
+--------------------------------------------------------------- */
+async function loadProgress(){
+  try{
+    const arr = await window.cloud.loadProgress();
+    completed = new Set(arr || []);
+  }catch(e){ completed = new Set(); }
+}
+
+/* Notes are saved to Firebase Firestore (see the <script type="module">
+   near the end of this file), so they follow the signed-in user across
+   devices instead of staying in one browser only. */
+async function loadNotes(){
+  try{ notes = await window.cloud.loadNotes() || {}; }
+  catch(e){ notes = {}; }
+}
+function saveNotes(){
+  window.cloud.saveNotes(notes).catch(()=>{ /* cloud save failed — notes stay in-memory only this session */ });
+}
+function currentNoteKey(){
+  return currentTrackId + '-' + (selectedSubIdx===null ? ('t-'+selectedTopicId) : (selectedTopicId+'-'+selectedSubIdx));
+}
+function escapeHtml(str){
+  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function getNoteData(key){
+  const raw = notes[key];
+  if(!raw) return {html:'', size:16};
+  if(typeof raw === 'string'){
+    // migrate old plain-text note format
+    return {html: escapeHtml(raw).replace(/\n/g,'<br>'), size:16};
+  }
+  return {html: raw.html||'', size: raw.size||16};
+}
+function noteHasContent(key){
+  const data = getNoteData(key);
+  return !!(data.html && data.html.replace(/<[^>]*>/g,'').replace(/&nbsp;/g,' ').trim());
+}
+function handleNotePaste(e){
+  e.preventDefault();
+  const cd = e.clipboardData || window.clipboardData;
+  const text = cd.getData('text/plain') || '';
+  const html = cd.getData('text/html');
+  /* "Copy code" buttons (chat apps, docs sites, GitHub) almost always write
+     PLAIN TEXT ONLY to the clipboard, on purpose, so no colors ever arrive
+     via text/html for those. So: if the pasted text looks like code, always
+     run it through our own highlighter first regardless of what else is on
+     the clipboard — this is what actually makes colors show up reliably. */
+  if(looksLikeCode(text)){
+    const highlighted = highlightCode(text);
+    document.execCommand('insertHTML', false, '<pre class="note-code-block"><code>'+highlighted+'</code></pre><p><br></p>');
+    return;
+  }
+  if(html && html.trim()){
+    try{
+      const baked = bakeComputedStyles(html);
+      const clean = sanitizePastedHtml(baked);
+      document.execCommand('insertHTML', false, clean);
+      return;
+    }catch(err){ /* fall through to plain text below */ }
+  }
+  document.execCommand('insertText', false, text);
+}
+/* Heuristic: does this pasted plain text look like source code? Requires at
+   least two independent signals so ordinary prose (that happens to mention
+   "class" or contain one semicolon) isn't mistaken for code. */
+function looksLikeCode(text){
+  if(!text) return false;
+  const trimmed = text.trim();
+  if(trimmed.length < 8) return false;
+  const lines = trimmed.split('\n');
+  const braceCount = (trimmed.match(/[{}]/g) || []).length;
+  const semiLines = lines.filter(l=>/;\s*$/.test(l.trim())).length;
+  const indentedLines = lines.filter(l=>/^[ \t]{2,}\S/.test(l)).length;
+  const keywordHit = /\b(public|private|protected|static|final|void|class|interface|extends|implements|import|package|function|def|const|let|var|#include|System\.out|console\.log|SELECT |INSERT |UPDATE )\b|(?:return|if|for|while)\s*\(/.test(trimmed);
+  let score = 0;
+  if(braceCount >= 2) score++;
+  if(semiLines >= 2) score++;
+  if(indentedLines >= 2) score++;
+  if(keywordHit) score++;
+  return score >= 2;
+}
+/* For genuine rich-HTML paste (selecting & copying text on a real web page,
+   not a "copy code" button): inserts the fragment into a hidden, attached
+   element so the browser actually computes its styles — including colors
+   that came from CSS classes rather than inline style attributes — then
+   bakes those computed values into explicit inline styles before the
+   sanitizer runs. Without this step, class-based coloring (very common:
+   most syntax highlighters use CSS classes, not inline styles) would be
+   silently lost once classes are stripped for safety. */
+function bakeComputedStyles(html){
+  const holder = document.createElement('div');
+  holder.style.position = 'fixed';
+  holder.style.left = '-99999px';
+  holder.style.top = '0';
+  holder.style.pointerEvents = 'none';
+  holder.innerHTML = html;
+  document.body.appendChild(holder);
+  try{
+    holder.querySelectorAll('*').forEach(el=>{
+      const cs = window.getComputedStyle(el);
+      const parts = [];
+      if(cs.color) parts.push('color:'+cs.color);
+      if(cs.backgroundColor && cs.backgroundColor !== 'rgba(0, 0, 0, 0)' && cs.backgroundColor !== 'transparent') parts.push('background-color:'+cs.backgroundColor);
+      if(cs.fontWeight && parseInt(cs.fontWeight,10) >= 600) parts.push('font-weight:'+cs.fontWeight);
+      if(cs.fontStyle === 'italic') parts.push('font-style:italic');
+      if(cs.textDecorationLine && cs.textDecorationLine !== 'none') parts.push('text-decoration:'+cs.textDecorationLine);
+      if(cs.fontFamily && /mono|consolas|courier|menlo/i.test(cs.fontFamily)) parts.push('font-family:'+cs.fontFamily);
+      if(parts.length) el.setAttribute('style', parts.join(';'));
+      el.removeAttribute('class');
+    });
+    holder.querySelectorAll('style,link').forEach(n=>n.remove());
+    return holder.innerHTML;
+  } finally {
+    document.body.removeChild(holder);
+  }
+}
+/* Keeps the useful structure from pasted content (bullet/numbered lists,
+   bold/italic, headings, code coloring already present in the source's
+   HTML clipboard) while stripping anything unsafe or irrelevant
+   (scripts, iframes, forms, images, tracking attributes, classes...). */
+function sanitizePastedHtml(html){
+  const allowedTags = new Set(['P','BR','B','STRONG','I','EM','U','S','STRIKE','UL','OL','LI',
+    'SPAN','DIV','H1','H2','H3','H4','PRE','CODE','A','TABLE','THEAD','TBODY','TR','TD','TH','BLOCKQUOTE','HR']);
+  const removeTags = new Set(['SCRIPT','STYLE','IFRAME','OBJECT','EMBED','FORM','INPUT','BUTTON',
+    'IMG','SVG','LINK','META','NOSCRIPT','VIDEO','AUDIO','SOURCE','SELECT','TEXTAREA']);
+  const allowedStyleProps = ['color','background-color','background','font-weight','font-style','text-decoration','font-family'];
+  let doc;
+  try{ doc = new DOMParser().parseFromString(html, 'text/html'); }
+  catch(e){ return ''; }
+  (function clean(node){
+    [...node.childNodes].forEach(child=>{
+      if(child.nodeType === 1){
+        const tag = child.tagName;
+        if(removeTags.has(tag)){ node.removeChild(child); return; }
+        if(!allowedTags.has(tag)){
+          while(child.firstChild) node.insertBefore(child.firstChild, child);
+          node.removeChild(child);
+          return;
+        }
+        [...child.attributes].forEach(attr=>{
+          const name = attr.name.toLowerCase();
+          if(name === 'href' && tag === 'A'){
+            if(!/^https?:|^mailto:/i.test(attr.value)) child.removeAttribute('href');
+            return;
+          }
+          if(name === 'style'){
+            const kept = attr.value.split(';').filter(rule=>{
+              const prop = (rule.split(':')[0] || '').trim().toLowerCase();
+              return allowedStyleProps.includes(prop);
+            }).join(';');
+            if(kept) child.setAttribute('style', kept); else child.removeAttribute('style');
+            return;
+          }
+          child.removeAttribute(attr.name);
+        });
+        if(tag === 'A'){ child.setAttribute('target','_blank'); child.setAttribute('rel','noopener noreferrer'); }
+        clean(child);
+      } else if(child.nodeType === 8){
+        node.removeChild(child);
+      }
+    });
+  })(doc.body);
+  return doc.body.innerHTML;
+}
+/* Lightweight VS Code "Dark+"-style highlighter for pasted/typed code that
+   didn't already carry its own colors. Select code in the note, then use
+   the </> button in the ribbon. */
+function highlightCode(raw){
+  const esc = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const pattern = /(\/\/[^\n]*)|(\/\*[\s\S]*?\*\/)|("(?:\\.|[^"\\])*")|('(?:\\.|[^'\\])*')|(@[A-Za-z_]\w*)|(\b\d+\.?\d*[fFdDlL]?\b)|(\b(?:public|private|protected|static|final|void|new|class|interface|extends|implements|return|if|else|for|while|do|switch|case|break|continue|try|catch|finally|throw|throws|import|package|this|super|null|true|false|instanceof|enum|abstract|synchronized|volatile|transient|const|default|assert|int|long|short|byte|char|boolean|float|double|function|let|var)\b)|(\b[A-Z]\w*\b)/g;
+  return esc.replace(pattern, (m, cmt1, cmt2, dstr, sstr, anno, num, kw, type)=>{
+    if(cmt1 || cmt2) return '<span style="color:#6a9955">'+m+'</span>';
+    if(dstr || sstr) return '<span style="color:#ce9178">'+m+'</span>';
+    if(anno) return '<span style="color:#dcdcaa">'+m+'</span>';
+    if(num) return '<span style="color:#b5cea8">'+m+'</span>';
+    if(kw) return '<span style="color:#c586c0">'+m+'</span>';
+    if(type) return '<span style="color:#4ec9b0">'+m+'</span>';
+    return m;
+  });
+}
+function insertCodeBlock(){
+  const ta = document.getElementById('notesArea');
+  if(!ta) return;
+  ta.focus();
+  const sel = window.getSelection();
+  if(!sel || sel.rangeCount === 0 || sel.isCollapsed){ toast('Select some code first, then click </>'); return; }
+  const raw = sel.toString();
+  if(!raw.trim()){ toast('Select some code first, then click </>'); return; }
+  const highlighted = highlightCode(raw);
+  document.execCommand('insertHTML', false, '<pre class="note-code-block"><code>'+highlighted+'</code></pre><p><br></p>');
+  onNoteInput(ta);
+}
+function onNoteInput(ta){
+  const key = currentNoteKey();
+  const size = parseInt(ta.style.fontSize,10) || 16;
+  notes[key] = { html: ta.innerHTML, size };
+  saveNotes();
+  updateNotesBtnState();
+}
+function formatNote(cmd){
+  const ta = document.getElementById('notesArea');
+  if(!ta) return;
+  ta.focus();
+  if(cmd === 'highlight'){
+    try{ document.execCommand('hiliteColor', false, '#fff59d'); }
+    catch(e){ document.execCommand('backColor', false, '#fff59d'); }
+  } else if(cmd === 'paste'){
+    // Programmatic paste is blocked by browsers for security; ask the user to use Ctrl/Cmd+V.
+    toast('Use Ctrl/Cmd+V to paste');
+    return;
+  } else if(cmd === 'cut' || cmd === 'copy'){
+    try{ document.execCommand(cmd, false, null); }
+    catch(e){ /* clipboard access may be blocked in this context */ }
+  } else {
+    document.execCommand(cmd, false, null);
+  }
+  onNoteInput(ta);
+}
+function setNoteHeading(tag){
+  const ta = document.getElementById('notesArea');
+  if(!ta) return;
+  ta.focus();
+  try{ document.execCommand('formatBlock', false, tag === 'P' ? 'P' : tag); }
+  catch(e){ /* formatBlock unsupported in this context */ }
+  onNoteInput(ta);
+}
+function changeNoteFontSize(delta){
+  const ta = document.getElementById('notesArea');
+  if(!ta) return;
+  const current = parseInt(ta.style.fontSize,10) || 16;
+  const size = Math.max(12, Math.min(32, current + delta*2));
+  ta.style.fontSize = size+'px';
+  onNoteInput(ta);
+}
+function updateNotesBtnState(){
+  const btn = document.getElementById('notesBtn');
+  if(!btn) return;
+  const has = noteHasContent(currentNoteKey());
+  btn.classList.toggle('has-note', has);
+  btn.innerHTML = has ? '📝 Notes ✓' : '📝 Notes';
+}
+function openNotes(){
+  const t = cfg().topics.find(t=>t.id===selectedTopicId);
+  const key = currentNoteKey();
+  const data = getNoteData(key);
+
+  // Notebook + section tabs, OneNote-style
+  document.getElementById('notesNotebookName').textContent = cfg().icon + ' ' + cfg().label;
+  const crumbTab = document.getElementById('notesTabCrumb');
+  const activeTab = document.getElementById('notesTabActive');
+  const titleEl = document.getElementById('notesTitle');
+
+  const era = t ? eraMeta[t.era] : null;
+  const accent = era ? era.hex : '#c0525b';
+  document.getElementById('notesTabsBar').style.setProperty('--tab-accent', accent);
+  activeTab.style.background = '#fff';
+  activeTab.style.boxShadow = `inset 0 -3px 0 ${accent}`;
+  crumbTab.style.background = rgba(accent,.16);
+  crumbTab.style.color = '#3a3a3a';
+
+  if(selectedSubIdx===null){
+    crumbTab.textContent = t ? t.title : '';
+    crumbTab.style.display = t ? '' : 'none';
+    activeTab.textContent = 'Topic notes';
+    titleEl.textContent = t ? t.title : 'Topic notes';
+  }else{
+    const s = t.subtopics[selectedSubIdx];
+    crumbTab.textContent = t.title;
+    crumbTab.style.display = '';
+    activeTab.textContent = s.name;
+    titleEl.textContent = s.name;
+  }
+
+  // Date / time, OneNote page-header style
+  const now = new Date();
+  document.getElementById('notesDate').textContent = now.toLocaleDateString(undefined, { day:'numeric', month:'short', year:'numeric' });
+  document.getElementById('notesTime').textContent = now.toLocaleTimeString(undefined, { hour:'2-digit', minute:'2-digit' });
+
+  const ta = document.getElementById('notesArea');
+  ta.innerHTML = data.html;
+  ta.style.fontSize = data.size + 'px';
+  notesOpen = true;
+  document.getElementById('notesBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(()=>{
+    ta.focus();
+    const range = document.createRange();
+    range.selectNodeContents(ta);
+    range.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  });
+}
+function closeNotes(){
+  notesOpen = false;
+  document.getElementById('notesBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleNotes(e){
+  if(e) e.stopPropagation();
+  const backdrop = document.getElementById('notesBackdrop');
+  if(backdrop.classList.contains('open')) closeNotes();
+  else openNotes();
+}
+function manualSaveNotes(){
+  const ta = document.getElementById('notesArea');
+  if(ta) onNoteInput(ta);
+  const btn = document.getElementById('notesSaveBtn');
+  if(btn){
+    btn.textContent = 'Saved ✓';
+    btn.classList.add('saved');
+    setTimeout(()=>{ btn.textContent = 'Save'; btn.classList.remove('saved'); }, 1400);
+  }
+}
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    const backdrop = document.getElementById('notesBackdrop');
+    if(backdrop && backdrop.classList.contains('open')) closeNotes();
+  }
+});
+async function saveProgress(){
+  try{ await window.cloud.saveProgress([...completed]); }
+  catch(e){ /* cloud save failed — progress stays in-memory only this session */ }
+}
+
+/* ---------------------------------------------------------------
+   PROMPT TEMPLATE
+--------------------------------------------------------------- */
+function groupLabelFor(t){
+  const g = cfg().groups.find(g=>g.id===t.group);
+  return (g ? g.name : '') + ' — ' + eraMeta[t.era].label;
+}
+
+function buildPrompt(t, s){
+  const trackLabel = groupLabelFor(t);
+  const isWeb = t.era === 'web' || t.era === 'angular' || t.era === 'react';
+
+  const persona = isWeb
+    ? 'Act as a senior front-end engineering mentor who also runs front-end technical interviews at a product company.'
+    : 'Act as a senior Java & Spring Boot engineering mentor who also runs backend technical interviews at a product company.';
+
+  const specificityLine = isWeb
+    ? 'Be specific — use real HTML tags, CSS properties/values, JavaScript method and API names, and browser behaviour throughout, and back claims with working code. Zero vague or generic statements.'
+    : 'Be specific — use real class names, package names, method signatures, annotations and version numbers throughout, and back claims with working code. Zero vague or generic statements.';
+
+  const internalsLine = isWeb
+    ? 'How It Works Internally — browser rendering/parsing behaviour, the CSS cascade, or the JS engine/event loop where relevant'
+    : 'How It Works Internally — JVM, container, or algorithmic behaviour where relevant';
+
+  const versionLine = isWeb
+    ? 'Version/compatibility notes where relevant (e.g. browser support, HTML/CSS spec changes, or ES6 vs modern ES202x JavaScript)'
+    : 'Version notes where relevant (e.g. what changed across Java 8/11/17/21, or Spring Boot 2.x vs 3.x)';
+
+  const namedRefsLine = isWeb
+    ? 'Specific named references (MDN Web Docs, the relevant W3C/WHATWG spec, or "Eloquent JavaScript" / "You Don\'t Know JS") where they strengthen a point'
+    : 'Specific named references (Java Language Specification, "Effective Java" by Joshua Bloch, official Spring / Baeldung docs) where they strengthen a point';
+
+  const interviewRoundLine = isWeb
+    ? 'Where this typically shows up in front-end interviews (coding round, UI implementation round, or JS deep-dive round)'
+    : 'Where this typically shows up in backend interviews (DSA round, system design round, or Java/Spring deep-dive round)';
+
+  const productionExampleLine = isWeb
+    ? 'a fuller implementation as it would appear in a real front-end codebase, with clean, semantic and well-organized markup/styles/scripts'
+    : 'a fuller implementation as it would appear in a real Spring Boot service, with proper package/class/method naming';
+
+  const connectionsLine = isWeb
+    ? `How "${s.name}" connects to topics that come before and after it on a front-end learning path`
+    : `How "${s.name}" connects to topics that come before and after it on a Java/Spring learning path`;
+
+  const crossCuttingLine = isWeb
+    ? 'Cross-cutting links: where this shows up in accessibility, performance, backend integration (APIs), or a modern framework (React/Vue/Angular)'
+    : 'Cross-cutting links: where this shows up in System Design, Databases, DevOps/Cloud, or Testing';
+
+  const isFramework = t.era === 'angular' || t.era === 'react';
+
+  const docsLine = isFramework
+    ? `The specific official documentation page (${t.era==='angular' ? 'angular.dev' : 'react.dev'}) for THIS subtopic`
+    : isWeb
+    ? 'The specific official documentation page (MDN Web Docs) for THIS subtopic'
+    : 'The specific official documentation page/chapter (Oracle Java Docs / Spring Framework Reference / Spring Boot Reference) for THIS subtopic';
+
+  const bookLine = isWeb
+    ? 'One standard book chapter reference if directly relevant ("Eloquent JavaScript", "You Don\'t Know JS", "CSS: The Definitive Guide")'
+    : 'One standard book chapter reference if directly relevant ("Effective Java", "Spring in Action", "Java Concurrency in Practice")';
+
+  const specLine = isWeb
+    ? 'Any relevant W3C/WHATWG/TC39 spec or proposal directly tied to this topic'
+    : 'Any relevant JEP (JDK Enhancement Proposal), RFC, or official release note directly tied to this topic';
+
+  const blogLine = isWeb
+    ? 'One high-quality blog or video resource (e.g. an MDN guide, CSS-Tricks or JavaScript.info article) if particularly useful'
+    : 'One high-quality blog or video resource (e.g. a Baeldung article, an official Spring guide) if particularly useful';
+
+  return `${persona} I need a complete, self-sufficient, interview-and-production-ready study note on ONE specific micro-topic. It must be detailed enough that I do not need any other source for this topic.
+
+📌 TRACK: ${trackLabel}
+📌 MAIN TOPIC: ${t.title}
+📍 SUBTOPIC (focus ONLY on this): ${s.name}
+ℹ️ CONTEXT: ${s.context}
+
+Produce the note under EXACTLY these 7 headings. ${specificityLine}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. 📌 KEY CONCEPTS & OVERVIEW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• All critical classes/interfaces, annotations, methods and keywords strictly related to "${s.name}"
+• One-line sharp definitions of every key term a developer must know
+• A tight 3–4 line summary of what this subtopic is about and where it sits in a real application
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. 🏛️ DETAILED NOTES (minimum 500 words)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Write in structured prose with sub-headings. Cover whichever of these dimensions are relevant:
+  A. Core Concept — what it is, why it exists, the problem it solves
+  B. ${internalsLine}
+  C. Code Implementation — at least one complete, working example with realistic naming
+  D. Common Pitfalls & Anti-patterns — mistakes developers actually make, including subtle bugs
+  E. Best Practices & Design Considerations — how a senior engineer would approach this in production
+
+Include:
+• Motivation for the feature/pattern, and the real consequences of getting it wrong
+• ${versionLine}
+• ${namedRefsLine}
+• This section alone should be sufficient to explain this subtopic confidently in a design discussion or interview
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. 🎯 INTERVIEW & PRODUCTION RELEVANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• ${interviewRoundLine}
+• 3–4 specific angles interviewers probe (e.g. "what happens internally when…", trade-off comparisons, "how would you fix this bug", scaling considerations)
+• Common mistakes candidates make when answering questions on this topic
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. 📝 PRACTICE QUESTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+List 5–7 realistic questions on this subtopic, a mix of:
+  [Interview Q] a conceptual/verbal question an interviewer would ask
+  [Coding Challenge] a short coding task to implement or debug
+  [Design Q] a trade-off or "how would you design/fix…" question (where relevant)
+Also add 1–2 tricky "gotcha" questions that test whether the fundamentals are actually understood.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. ✍️ CODE IMPLEMENTATION POINTERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+For a MINIMAL working example:
+  → the smallest complete snippet that correctly demonstrates the concept
+  → 2–3 inline comments explaining the non-obvious parts
+
+For a PRODUCTION-STYLE example:
+  → ${productionExampleLine}
+  → any configuration, dependency or setup required for it to actually run
+  → one sentence on how you would test this
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. 🔗 CONNECTIONS & LINKAGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• ${connectionsLine}
+• ${crossCuttingLine}
+• Comparison with a similar concept elsewhere in the ecosystem, or in another language/framework the reader may already know
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. 📚 RECOMMENDED SOURCES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• ${docsLine}
+• ${bookLine}
+• ${specLine}
+• ${blogLine}
+
+FORMAT: Use the numbered headings exactly as above. Bold all key terms, class/property/method names, and version numbers. Structured prose for Section 2; bullet points for facts and lists elsewhere. Total response must be comprehensive enough to serve as a STANDALONE revision note for this specific subtopic.`;
+}
+
+/* ---------------------------------------------------------------
+   RENDER: chips
+--------------------------------------------------------------- */
+function renderChips(){
+  const row = document.getElementById('chipRow');
+  row.innerHTML = cfg().chips.map(c=>{
+    const label = c==='all' ? 'All' : eraMeta[c].label;
+    const hex = c==='all' ? eraMeta[cfg().chips[1]].hex : eraMeta[c].hex;
+    const isActive = c===activeChip;
+    const style = isActive
+      ? `style="background:${rgba(hex,.32)};border-color:${rgba(hex,.6)};box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 6px 16px ${rgba(hex,.25)};"`
+      : '';
+    return `<button class="chip ${isActive?'active':''}" ${style} onclick="setChip('${c}')">${label}</button>`;
+  }).join('');
+}
+function setChip(c){ activeChip = c; renderTrail(); }
+function toggleLegend(){ document.getElementById('legendPop').classList.toggle('show'); }
+document.addEventListener('click', (e)=>{
+  const wrap = document.querySelector('.legend-wrap');
+  if(wrap && !wrap.contains(e.target)) document.getElementById('legendPop').classList.remove('show');
+});
+
+/* ---------------------------------------------------------------
+   TRACK SWITCHING
+--------------------------------------------------------------- */
+function selectTrack(id){
+  if(currentTrackId===id) return;
+  currentTrackId = id;
+  activeChip = 'all';
+  selectedTopicId = cfg().topics[0].id;
+  selectedSubIdx = null;
+  notesOpen = false;
+  document.querySelectorAll('.track-tab[data-track]').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.track===id);
+  });
+  document.getElementById('trailIcon').textContent = cfg().icon;
+  document.getElementById('trailTitleText').innerHTML = cfg().trailTitle;
+  document.getElementById('searchInput').value = '';
+  renderTrail();
+}
+
+/* ---------------------------------------------------------------
+   RENDER: trail (left column)
+--------------------------------------------------------------- */
+function progressForTopic(t){
+  const done = t.subtopics.filter((_,i)=>completed.has(t.id+'-'+i)).length;
+  return `${done}/${t.subtopics.length}`;
+}
+function totalStats(){
+  let total=0, done=0;
+  cfg().topics.forEach(t=>{ total+=t.subtopics.length; t.subtopics.forEach((_,i)=>{ if(completed.has(t.id+'-'+i)) done++; }); });
+  return {total, done};
+}
+
+function renderTrail(){
+  renderChips();
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  const groupList = document.getElementById('groupList');
+  let html = '';
+
+  cfg().groups.forEach(g=>{
+    let ts = cfg().topics.filter(t=>t.group===g.id);
+    if(activeChip!=='all') ts = ts.filter(t=>t.era===activeChip);
+    if(q){
+      ts = ts.filter(t=> t.title.toLowerCase().includes(q) || t.subtopics.some(s=>s.name.toLowerCase().includes(q)) );
+    }
+    if(ts.length===0) return;
+    const gHex = groupColor[g.id];
+    html += `<div class="group-block" style="--group-bg:${rgba(gHex,.16)};--group-border:${rgba(gHex,.32)};--group-accent:${gHex};">
+      <div class="group-eyebrow"><span class="num">${g.num}</span>${g.eyebrow}</div>
+      <div class="group-name"><span class="group-dot" style="background:${gHex}"></span>${g.name}</div>`;
+    ts.forEach(t=>{
+      const sel = t.id===selectedTopicId ? 'selected' : '';
+      const hex = eraMeta[t.era].hex;
+      const rowStyle = sel
+        ? `style="--accent-line:${rgba(hex,.55)};--accent-soft:${rgba(hex,.14)};"`
+        : '';
+      html += `<div class="topic-row ${sel}" ${rowStyle} onclick="selectTopic(${t.id})">
+        <div class="topic-icon-sm" style="background:${rgba(hex,.2)}">${t.icon}</div>
+        <div class="topic-row-text">
+          <div class="topic-row-title">${t.title}</div>
+          <div class="topic-row-sub">${progressForTopic(t)} subtopics</div>
+        </div>
+        <div class="topic-row-chev">›</div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  if(!html){ html = `<div class="empty-note">No waypoints match that search.</div>`; }
+  groupList.innerHTML = html;
+
+  const stats = totalStats();
+  document.getElementById('trailMeta').textContent = `${cfg().topics.length} WAYPOINTS · ${stats.done}/${stats.total} MAPPED`;
+
+  renderSubList();
+  renderDetail();
+  alignSubCardToSelected();
+}
+
+/* ---------------------------------------------------------------
+   Keep the subtopics box vertically level with the selected row
+--------------------------------------------------------------- */
+function alignSubCardToSelected(){
+  requestAnimationFrame(()=>{
+    const row = document.querySelector('.topic-row.selected');
+    const subCard = document.getElementById('subCard');
+    const detailPanel = document.getElementById('detailPanel');
+    const grid = document.querySelector('.grid');
+    if(!row || !grid) return;
+    const gridTop = grid.getBoundingClientRect().top;
+    const rowTop = row.getBoundingClientRect().top;
+    const trailHeight = document.getElementById('trailCard').offsetHeight;
+    let rawOffset = Math.max(0, rowTop - gridTop);
+
+    if(subCard){
+      const maxOffset = Math.max(0, trailHeight - subCard.offsetHeight);
+      subCard.style.marginTop = Math.min(rawOffset, maxOffset) + 'px';
+    }
+    if(detailPanel){
+      const maxOffset = Math.max(0, trailHeight - detailPanel.offsetHeight);
+      detailPanel.style.marginTop = Math.min(rawOffset, maxOffset) + 'px';
+    }
+  });
+}
+window.addEventListener('resize', alignSubCardToSelected);
+
+function retriggerAnim(el){
+  if(!el) return;
+  el.classList.remove('reanim');
+  void el.offsetWidth; // force reflow so the animation restarts
+  el.classList.add('reanim');
+}
+
+/* ---------------------------------------------------------------
+   RENDER: subtopics (middle column)
+--------------------------------------------------------------- */
+function selectTopic(id){
+  selectedTopicId = id;
+  selectedSubIdx = null;
+  notesOpen = false;
+  renderTrail();
+}
+function renderSubList(){
+  const t = cfg().topics.find(t=>t.id===selectedTopicId);
+  const hex = eraMeta[t.era].hex;
+  const subCard = document.getElementById('subCard');
+  retriggerAnim(subCard);
+  subCard.style.setProperty('--accent', hex);
+  subCard.style.setProperty('--accent-line', rgba(hex,.5));
+  subCard.style.setProperty('--accent-soft', rgba(hex,.14));
+  subCard.style.setProperty('--accent-shadow', rgba(hex,.35));
+
+  document.getElementById('subHeadTitle').textContent = `${t.subtopics.length} SUBTOPICS`;
+  const done = t.subtopics.filter((_,i)=>completed.has(t.id+'-'+i)).length;
+  document.getElementById('subProgress').textContent = `${done}/${t.subtopics.length} done`;
+
+  const list = document.getElementById('subList');
+  list.innerHTML = t.subtopics.map((s,i)=>{
+    const cid = t.id+'-'+i;
+    const isDone = completed.has(cid);
+    const isActive = selectedSubIdx===i;
+    return `<div class="sub-row ${isActive?'active':''}" onclick="selectSub(${i})">
+      <div class="sub-check ${isDone?'done':''}" onclick="event.stopPropagation(); toggleDone(${i})">${isDone?'✓':''}</div>
+      <div class="sub-label ${isDone?'done':''}">${s.name}</div>
+    </div>`;
+  }).join('');
+}
+function selectSub(i){ selectedSubIdx = i; notesOpen = false; renderSubList(); renderDetail(); }
+function toggleDone(i){
+  const t = cfg().topics.find(t=>t.id===selectedTopicId);
+  const cid = t.id+'-'+i;
+  if(completed.has(cid)) completed.delete(cid); else completed.add(cid);
+  saveProgress();
+  renderTrail();
+}
+
+/* ---------------------------------------------------------------
+   RENDER: detail panel (right column)
+--------------------------------------------------------------- */
+function themePanel(panel, hex){
+  panel.style.setProperty('--accent', hex);
+  panel.style.setProperty('--accent-a', rgba(hex,.6));
+  panel.style.setProperty('--accent-b', rgba(hex,.22));
+  panel.style.setProperty('--accent-border', rgba(hex,.65));
+  panel.style.setProperty('--accent-border-soft', rgba(hex,.32));
+  panel.style.setProperty('--accent-shadow', rgba(hex,.4));
+  panel.style.setProperty('--accent-soft-dark', rgba(hex,.22));
+  panel.style.background =
+    `radial-gradient(circle at 105% -10%, ${rgba(hex,.35)}, transparent 55%), ` +
+    `radial-gradient(circle at -10% 110%, ${rgba(hex,.16)}, transparent 50%), var(--dark)`;
+}
+
+function renderDetail(){
+  const t = cfg().topics.find(t=>t.id===selectedTopicId);
+  const panel = document.getElementById('detailPanel');
+  const era = eraMeta[t.era];
+  const g = cfg().groups.find(g=>g.id===t.group);
+  themePanel(panel, era.hex);
+  retriggerAnim(panel);
+
+  if(selectedSubIdx===null){
+    const hasNote = noteHasContent(currentNoteKey());
+    panel.innerHTML = `
+      <div class="badge-row">
+        <span class="badge" style="background:${era.hex}">${era.label}</span>
+        <div class="badge-row-right">
+          <span class="badge-count">${t.subtopics.length} subtopics</span>
+          <button class="notes-btn ${hasNote?'has-note':''}" id="notesBtn" onclick="toggleNotes(event)">📝 Notes${hasNote?' ✓':''}</button>
+        </div>
+      </div>
+      <div class="detail-eyebrow">${g.eyebrow}</div>
+      <h2 class="detail-title">${t.icon} ${t.title}</h2>
+      <p class="detail-blurb">${t.blurb}</p>
+      <button class="detail-btn dark" onclick="selectSub(0)">Start learning →</button>
+      <div class="detail-divider"></div>
+      <div class="note-label">Learning note</div>
+      <div class="note-text">There is no perfect order. Follow the trail, master one subtopic at a time using its Claude prompt, then come back and rebuild something with it.</div>
+    `;
+    return;
+  }
+
+  const s = t.subtopics[selectedSubIdx];
+  const cid = t.id+'-'+selectedSubIdx;
+  const isDone = completed.has(cid);
+  const prompt = buildPrompt(t, s).replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const hasNote = noteHasContent(currentNoteKey());
+
+  panel.innerHTML = `
+    <div class="badge-row">
+      <span class="badge" style="background:${era.hex}">SUBTOPIC</span>
+      <div class="badge-row-right">
+        <span class="badge-count">${selectedSubIdx+1} of ${t.subtopics.length}</span>
+        <button class="notes-btn ${hasNote?'has-note':''}" id="notesBtn" onclick="toggleNotes(event)">📝 Notes${hasNote?' ✓':''}</button>
+      </div>
+    </div>
+    <div class="detail-crumb">↳ ${t.title}</div>
+    <h2 class="detail-title" style="font-size:24px;">${s.name}</h2>
+    <div class="context-line">${s.context}</div>
+    <div class="note-label">Claude study prompt</div>
+    <div class="prompt-box" id="promptBox">${prompt}</div>
+    <button class="detail-btn gold" id="copyBtn" onclick="copyPrompt('${cid}')">Copy prompt</button>
+    <button class="detail-btn ${isDone?'dark':'ghost'}" onclick="toggleDone(${selectedSubIdx})">${isDone?'✓ Marked complete':'Mark as complete'}</button>
+  `;
+}
+
+async function copyPrompt(cid){
+  const t = cfg().topics.find(t=>t.id===selectedTopicId);
+  const s = t.subtopics[selectedSubIdx];
+  const text = buildPrompt(t, s);
+  const btn = document.getElementById('copyBtn');
+  try{
+    await navigator.clipboard.writeText(text);
+    btn.textContent = 'Copied ✓';
+  }catch(e){
+    // fallback for environments without clipboard API
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); btn.textContent = 'Copied ✓'; }
+    catch(e2){ btn.textContent = 'Select text above to copy'; }
+    document.body.removeChild(ta);
+  }
+  setTimeout(()=>{ btn.textContent = 'Copy prompt'; }, 1800);
+}
+
+/* ---------------------------------------------------------------
+   MISC
+--------------------------------------------------------------- */
+function toast(msg){
+  const el = document.createElement('div');
+  el.textContent = msg;
+  el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#19140d;color:#f2ede0;padding:10px 18px;border-radius:999px;font-size:13px;z-index:99;box-shadow:0 8px 24px rgba(0,0,0,.25)';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1800);
+}
+async function resetProgress(){
+  if(!confirm('Reset all progress on this trail? This cannot be undone.')) return;
+  completed = new Set();
+  await saveProgress();
+  renderTrail();
+}
+
+/* ---------------------------------------------------------------
+   INIT
+--------------------------------------------------------------- */
+window.startApp = async function(){
+  await loadProgress();
+  await loadNotes();
+  renderTrail();
+};
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider,
+    createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    signInAnonymously, signOut
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc, setDoc
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+  /* ------------------------------------------------------------------
+     1) Create a free project at https://console.firebase.google.com
+     2) Add a "Web app" to it, then paste the config it gives you below.
+     3) In the console, enable Authentication → Sign-in method →
+        Email/Password AND Google.
+     4) Enable Firestore Database (production mode is fine) and set the
+        security rules given in the setup notes so each user can only
+        read/write their own data.
+     5) Add your hosting domain (e.g. yoursite.netlify.app) under
+        Authentication → Settings → Authorized domains, or Google
+        sign-in will fail once this is hosted somewhere other than
+        localhost.
+  ------------------------------------------------------------------ */
+  const firebaseConfig = {
+  apiKey: "AIzaSyANNpWQfoT5hQ4bqrNSbqEfHvbmydbEPw4",
+  authDomain: "upscnotes-9e880.firebaseapp.com",
+  projectId: "upscnotes-9e880",
+  storageBucket: "upscnotes-9e880.firebasestorage.app",
+  messagingSenderId: "592133778714",
+  appId: "1:592133778714:web:47a2222f9b46c4cb96d0a3",
+  measurementId: "G-VHWDQHTK0D"
+};
+
+  const APP_KEY = "softwareonestop"; // namespaces this app's data inside each user's document
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  let currentUser = null;
+
+  function userDocRef(){ return doc(db, 'users', currentUser.uid); }
+
+  window.cloud = {
+    async saveNotes(notesObj){
+      if(!currentUser) return;
+      try{ await setDoc(userDocRef(), { [APP_KEY]: { notes: notesObj } }, { merge: true }); }
+      catch(e){ console.error('Cloud save (notes) failed:', e); }
+    },
+    async loadNotes(){
+      if(!currentUser) return {};
+      try{
+        const snap = await getDoc(userDocRef());
+        const data = snap.exists() ? snap.data() : null;
+        return (data && data[APP_KEY] && data[APP_KEY].notes) ? data[APP_KEY].notes : {};
+      }catch(e){ console.error('Cloud load (notes) failed:', e); return {}; }
+    },
+    async saveProgress(arr){
+      if(!currentUser) return;
+      try{ await setDoc(userDocRef(), { [APP_KEY]: { progress: arr } }, { merge: true }); }
+      catch(e){ console.error('Cloud save (progress) failed:', e); }
+    },
+    async loadProgress(){
+      if(!currentUser) return [];
+      try{
+        const snap = await getDoc(userDocRef());
+        const data = snap.exists() ? snap.data() : null;
+        return (data && data[APP_KEY] && data[APP_KEY].progress) ? data[APP_KEY].progress : [];
+      }catch(e){ console.error('Cloud load (progress) failed:', e); return []; }
+    }
+  };
+
+  function setGateError(msg){
+    const el = document.getElementById('authError');
+    if(el){ el.textContent = msg || ''; el.style.display = msg ? 'block' : 'none'; }
+  }
+  function setGateBusy(busy){
+    document.querySelectorAll('#authGate button, #authGate input').forEach(el=> el.disabled = busy);
+  }
+  function friendlyAuthError(e){
+    const code = (e && e.code) || '';
+    if(code.includes('wrong-password') || code.includes('invalid-credential')) return 'Incorrect email or password.';
+    if(code.includes('user-not-found')) return 'No account with that email — try "Sign up" instead.';
+    if(code.includes('email-already-in-use')) return 'That email already has an account — try "Sign in" instead.';
+    if(code.includes('weak-password')) return 'Password should be at least 6 characters.';
+    if(code.includes('popup-closed-by-user')) return 'Google sign-in was closed before finishing.';
+    if(code.includes('unauthorized-domain')) return 'This domain isn\'t authorized in Firebase yet — add it under Authentication → Settings → Authorized domains.';
+    return (e && e.message) || 'Something went wrong — please try again.';
+  }
+
+  document.getElementById('authGoogleBtn')?.addEventListener('click', async ()=>{
+    setGateError(''); setGateBusy(true);
+    try{ await signInWithPopup(auth, new GoogleAuthProvider()); }
+    catch(e){ setGateError(friendlyAuthError(e)); }
+    setGateBusy(false);
+  });
+  document.getElementById('authGuestBtn')?.addEventListener('click', async ()=>{
+    setGateError(''); setGateBusy(true);
+    try{ await signInAnonymously(auth); }
+    catch(e){ setGateError(friendlyAuthError(e)); }
+    setGateBusy(false);
+  });
+  document.getElementById('authSubmitBtn')?.addEventListener('click', async ()=>{
+    const email = document.getElementById('authEmail').value.trim();
+    const pass = document.getElementById('authPassword').value;
+    const mode = document.getElementById('authForm').dataset.mode || 'signin';
+    if(!email || !pass){ setGateError('Enter an email and password.'); return; }
+    setGateError(''); setGateBusy(true);
+    try{
+      if(mode === 'signup') await createUserWithEmailAndPassword(auth, email, pass);
+      else await signInWithEmailAndPassword(auth, email, pass);
+    }catch(e){ setGateError(friendlyAuthError(e)); }
+    setGateBusy(false);
+  });
+  document.getElementById('authToggleMode')?.addEventListener('click', ()=>{
+    const form = document.getElementById('authForm');
+    const isSignup = form.dataset.mode === 'signup';
+    form.dataset.mode = isSignup ? 'signin' : 'signup';
+    document.getElementById('authSubmitBtn').textContent = isSignup ? 'Sign in' : 'Create account';
+    document.getElementById('authToggleMode').textContent = isSignup ? 'Need an account? Sign up' : 'Have an account? Sign in';
+    document.getElementById('authTitle').textContent = isSignup ? 'Welcome back' : 'Create your account';
+    setGateError('');
+  });
+  document.getElementById('signOutBtn')?.addEventListener('click', async ()=>{
+    await signOut(auth);
+    location.reload();
+  });
+
+  onAuthStateChanged(auth, async (user)=>{
+    if(user){
+      currentUser = user;
+      document.getElementById('authGate').classList.remove('open');
+      document.body.style.overflow = '';
+      const box = document.getElementById('accountBox');
+      if(box){
+        box.style.display = 'flex';
+        document.getElementById('accountEmail').textContent = user.isAnonymous ? 'Guest session' : (user.email || 'Signed in');
+      }
+      if(typeof window.startApp === 'function') await window.startApp();
+    }else{
+      currentUser = null;
+      document.getElementById('authGate').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      const box = document.getElementById('accountBox');
+      if(box) box.style.display = 'none';
+    }
+  });
+</script>
+
+</body>
+</html>
